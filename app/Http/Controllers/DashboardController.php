@@ -8,7 +8,6 @@ use URL;
 use Auth;
 use session;
 use Datatables;
-use App\DetailPengguna;
 use App\Pengguna;
 use Carbon\Carbon;
 use App\Inovasi;
@@ -29,7 +28,7 @@ class DashboardController extends Controller
     //ajax datatable
     public function penggunaAjax()
     {
-        $data  = DetailPengguna::all();
+        $data  = Pengguna::all();
 
         $listKategori ='';
         // return $data;
@@ -43,7 +42,7 @@ class DashboardController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="">
                                 '.csrf_field().'
-                                <a type="button" href="'.URL::to('/pengguna/'.$data->id_detail_pengguna.'').'" class="btn bg-teal-400 btn-labeled btn-labeled-left rounded-round"><b><i class="icon-file-presentation"></i></b> Detail</a>
+                                <a type="button" href="'.URL::to('/pengguna/'.$data->id_pengguna.'').'" class="btn bg-teal-400 btn-labeled btn-labeled-left rounded-round"><b><i class="icon-file-presentation"></i></b> Detail</a>
                             </form>';
                 return $button;
             })

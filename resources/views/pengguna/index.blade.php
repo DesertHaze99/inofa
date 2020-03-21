@@ -21,6 +21,9 @@
 	<script src="{{ asset('limitless/Template/global_assets/js/demo_pages/user_pages_profile_tabbed.js')}}"></script>
 	<!-- /theme JS files -->
 
+	<!-- chart js -->
+	<script src="{{ asset('limitless/Template/global_assets/js/chart/Chart.js')}}"></script>
+
 @endsection
 
 
@@ -35,25 +38,16 @@
                 <div class="page-header page-header-light">
                     <div class="page-header-content header-elements-md-inline">
                         <div class="page-title d-flex">
-                            <h4><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">User Pages</span> - Tabbed Profile</h4>
+                            <h1><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">User Pages</span> - {{$detailPengguna->username}}</h1>
                             <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
-                        </div>
-
-                        <div class="header-elements d-none">
-                            <div class="d-flex justify-content-center">
-                                <a href="#" class="btn btn-link btn-float text-default"><i class="icon-bars-alt text-primary"></i><span>Statistics</span></a>
-                                <a href="#" class="btn btn-link btn-float text-default"><i class="icon-calculator text-primary"></i> <span>Invoices</span></a>
-                                <a href="#" class="btn btn-link btn-float text-default"><i class="icon-calendar5 text-primary"></i> <span>Schedule</span></a>
-                            </div>
                         </div>
                     </div>
 
                     <div class="breadcrumb-line breadcrumb-line-light header-elements-md-inline">
                         <div class="d-flex">
                             <div class="breadcrumb">
-                                <a href="index.html" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
-                                <a href="user_pages_profile_tabbed.html" class="breadcrumb-item">User pages</a>
-                                <span class="breadcrumb-item active">Tabbed profile</span>
+                                <a href="{{url('/')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
+                                <span class="breadcrumb-item active">{{$detailPengguna->username}}</span>
                             </div>
 
                             <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
@@ -61,10 +55,6 @@
 
                         <div class="header-elements d-none">
                             <div class="breadcrumb justify-content-center">
-                                <a href="#" class="breadcrumb-elements-item">
-                                    <i class="icon-comment-discussion mr-2"></i>
-                                    Support
-                                </a>
 
                                 <div class="breadcrumb-elements-item dropdown p-0">
                                     <a href="#" class="breadcrumb-elements-item dropdown-toggle" data-toggle="dropdown">
@@ -133,21 +123,20 @@
 											<a href="#schedule" class="nav-link" data-toggle="tab">
 												<i class="icon-users4"></i>
 												Mutuals
-												<span class="font-size-sm font-weight-normal opacity-75 ml-auto">02:56pm</span>
 											</a>
 										</li>
-										<li class="nav-item">
+										{{-- <li class="nav-item">
 											<a href="#inbox" class="nav-link" data-toggle="tab">
 												<i class="icon-envelop2"></i>
 												Inbox
 												<span class="badge bg-danger badge-pill ml-auto">29</span>
 											</a>
-										</li>
+										</li> --}}
 										<li class="nav-item">
 											<a href="#orders" class="nav-link" data-toggle="tab">
 												<i class="icon-collaboration"></i>
 												Groups
-												<span class="badge bg-success badge-pill ml-auto">16</span>
+												<span class="badge bg-success badge-pill ml-auto">{{($dibuatAktif + $bergabungAktif + $dibuatInaktif + $bergabungInaktif)}}</span>
 											</a>
 										</li>
 										<li class="nav-item-divider"></li>
@@ -239,17 +228,6 @@
 											</div>
 										</li>
 									</ul>
-								</div>
-
-								<div class="card-footer d-flex justify-content-between align-items-center py-2">
-									<a href="#" class="text-grey">
-										All users
-									</a>
-
-									<div>
-										<a href="#" class="text-grey" data-popup="tooltip" title="Conference room"><i class="icon-comment"></i></a>
-										<a href="#" class="text-grey ml-2" data-popup="tooltip" title="Settings"><i class="icon-gear"></i></a>
-									</div>
 								</div>
 							</div>
 							<!-- /online users -->
@@ -350,10 +328,63 @@
 							<!-- /2 columns form -->
 
 
+							<!-- Profil map -->
+							<div class="card">
+								<div class="card-header header-elements-sm-inline">
+									<h6 class="card-title">User's location</h6>
+									<div class="header-elements">
+										<span><i class="icon-history mr-2 text-success"></i> Updated 3 hours ago</span>
 
+										<div class="list-icons ml-3">
+					                		<a class="list-icons-item" data-action="reload"></a>
+					                	</div>
+				                	</div>
+								</div>
 
+								<div class="card-body">
+									<div class="chart-container">
+										<div class="chart has-fixed-height" >
+											<div id="map" style="height:400px;"></div>
 
+											<script type="text/javascript">
+											function initMap(){
 
+											var locations = [
+												['Provinsi DI Yogyakarta = 0', -7.8753849, 110.4262088, 5]
+											];
+
+											var map = new google.maps.Map(document.getElementById('map'), {
+												zoom: 5,
+												center: new google.maps.LatLng(-0.8606915, 120.663729),
+												mapTypeId: google.maps.MapTypeId.ROADMAP
+											});
+
+											var infowindow = new google.maps.InfoWindow();
+
+											var marker, i;
+
+											for (i = 0; i < locations.length; i++) {  
+												marker = new google.maps.Marker({
+												position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+												map: map
+												});
+
+												google.maps.event.addListener(marker, 'click', (function(marker, i) {
+												return function() {
+													infowindow.setContent(locations[i][0]);
+													infowindow.open(map, marker);
+												}
+												})(marker, i));
+											}
+											}
+											</script>
+											<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUbRHtu3k_fg3jDGk_qAatE5jA4bC_ndE&callback=initMap" async defer></script>
+
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /profile map -->
 
 
 
@@ -380,6 +411,9 @@
 							</div>
 							<!-- /sales stats -->
 
+
+							
+
 					    </div>
 
 					    <div class="tab-pane fade" id="schedule">
@@ -399,7 +433,7 @@
 
 								<div class="card-body">
 									<div class="chart-container">
-										<div class="chart has-fixed-height" id="available_hours"></div>
+										<canvas id="mutuals"></canvas>
 									</div>
 								</div>
 							</div>
@@ -420,7 +454,28 @@
 								</div>
 
 								<div class="card-body">
-									<div class="my-schedule"></div>
+									<div class="my-schedule">
+										<ul class="media-list media-list-linked">
+											<li class="media bg-light font-weight-semibold py-2">All friends</li>
+											@foreach($mutual as $dataMutual)
+												<li>
+													<a href="{{URL::to('/pengguna/'.$dataMutual->id_detail_pengguna.'')}}" class="media">
+														<div class="mr-3"><img src="{{url('/')}}/{{$dataMutual->profile_picture}}" class="rounded-circle" width="40" height="40" alt=""></div>
+														<div class="media-body">
+															<div class="media-title font-weight-semibold">{{$dataMutual->username}}</div>
+															<span class="text-muted">{{$dataMutual->rating}}</span>
+														</div>
+														<div class="align-self-center ml-3 text-nowrap">
+															<span class="text-muted">
+																<i class="icon-pin-alt font-size-base mr-1"></i>
+																Vienna
+															</span>
+														</div>
+													</a>
+												</li>
+											@endforeach
+										</ul>
+									</div>
 								</div>
 							</div>
 							<!-- /schedule -->
@@ -945,13 +1000,18 @@
 								<div class="card-header header-elements-inline">
 									<h6 class="card-title">Groups</h6>
 									<div class="header-elements">
-										<span><i class="icon-arrow-down22 text-danger"></i> <span class="font-weight-semibold">- 29.4%</span></span>
+									<span><i class="icon-arrow-down22 text-danger"></i> <span class="font-weight-semibold">~ @if( ($dibuatAktif + $bergabungAktif + $dibuatInaktif + $bergabungInaktif)== 0) @else { {{ (($dibuatAktif + $bergabungAktif)/($dibuatAktif + $bergabungAktif + $dibuatInaktif + $bergabungInaktif) )*100 }} } @endif %</span></span>
 			                		</div>
 								</div>
 
 								<div class="card-body">
 									<div class="chart-container">
-										<div class="chart has-fixed-height" id="balance_statistics"></div>
+										<div class="row justify-content-md-center">
+											<div class="col-md-7">
+												<canvas id="groupsChart" style="display: block;" ></canvas>
+											</div>
+										</div>
+										
 									</div>
 								</div>
 
@@ -961,18 +1021,18 @@
 											<tr class="table-active">
 											<td colspan="7" class="font-weight-semibold">Made by : {{$detailPengguna->username}}</td>
 												<td class="text-right">
-													<span class="badge bg-secondary badge-pill">24</span>
+													<span class="badge bg-secondary badge-pill">{{$dibuatAktif + $dibuatInaktif }}</span>
 												</td>
 											</tr>
 											@foreach($inovasi as $dataInovasi)
 												<tr>
 													<td class="pr-0" style="width: 45px;">
-														<a href="#">
+														<a href="{{ URL::to('/inovasi/'.$dataInovasi->id_inovasi.'' )}}">
 															<img src="{{url('/')}}/limitless/Template/global_assets/images/placeholders/placeholder.jpg" height="60" alt="">
 														</a>
 													</td>
 													<td>
-														<a href="#" class="font-weight-semibold"> {{$dataInovasi->judul}} </a>
+														<a href="{{ URL::to('/inovasi/'.$dataInovasi->id_inovasi.'' )}} " class="font-weight-semibold"> {{$dataInovasi->judul}} </a>
 														<div class="text-muted font-size-sm">
 															@if( $dataInovasi->status == 1)
 																<span class="badge badge-mark bg-grey border-success mr-1"></span>
@@ -1011,20 +1071,20 @@
 											<tr class="table-active">
 												<td colspan="7" class="font-weight-semibold"> {{$detailPengguna->username}} has joined</td>
 													<td class="text-right">
-														<span class="badge bg-successx badge-pill">24</span>
+														<span class="badge bg-secondary badge-pill">{{$bergabungAktif + $bergabungInaktif }}</span>
 													</td>
 												</tr>
-												@foreach($inovasi as $dataInovasi)
+												@foreach($subscription as $subScription)
 													<tr>
 														<td class="pr-0" style="width: 45px;">
-															<a href="#">
+															<a href="{{ URL::to('/inovasi/'.$subScription->id_inovasi.'' )}}">
 																<img src="{{url('/')}}/limitless/Template/global_assets/images/placeholders/placeholder.jpg" height="60" alt="">
 															</a>
 														</td>
 														<td>
-															<a href="#" class="font-weight-semibold"> {{$dataInovasi->judul}} </a>
+															<a href="{{ URL::to('/inovasi/'.$subScription->id_inovasi.'' )}}" class="font-weight-semibold"> {{$subScription->judul}} </a>
 															<div class="text-muted font-size-sm">
-																@if( $dataInovasi->status == 1)
+																@if( $subScription->status == 1)
 																	<span class="badge badge-mark bg-grey border-success mr-1"></span>
 																	Active
 																@else
@@ -1034,7 +1094,7 @@
 																
 															</div>
 														</td>
-														<td>{{$dataInovasi->tagline}}</td>
+														<td>{{$subScription->tagline}}</td>
 														<td>
 															<h6 class="mb-0 font-weight-semibold">20</h6>
 														</td>
@@ -1078,4 +1138,130 @@
 </div>
 
 
+@endsection
+
+@section('script')
+	<script>
+		$(document).ready(function() {
+			var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+			var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+			var d = new Date();
+			var today = months[d.getMonth()];
+
+
+			var last = new Date(d.getTime() - (30 * 24 * 60 * 60 * 1000));
+			var m1=months[last.getMonth()];
+			
+			var last = new Date(d.getTime() - (60 * 24 * 60 * 60 * 1000));
+			var m2 = months[last.getMonth()];
+
+			var last = new Date(d.getTime() - (90 * 24 * 60 * 60 * 1000));
+			var m3 = months[last.getMonth()];
+
+			var last = new Date(d.getTime() - (120 * 24 * 60 * 60 * 1000));
+			var m4 = months[last.getMonth()];
+
+			var last = new Date(d.getTime() - (150 * 24 * 60 * 60 * 1000));
+			var m5 = months[last.getMonth()];
+
+			var last = new Date(d.getTime() - (180 * 24 * 60 * 60 * 1000));
+			var m6 = months[last.getMonth()];
+
+
+			var ctx = document.getElementById("mutuals").getContext('2d');
+			var groupChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: [m6, m5, m4, m3, m2 ,m1 , today],
+					datasets: [{
+						label: 'mutuals',
+						data: [1,2,3,4,5,6,7],
+						backgroundColor: [
+							'rgba(255, 99, 132, 1)',
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)',
+							'rgba(255, 159, 64, 1)',
+							'rgba(95, 146, 109, 1)'
+						],
+						borderColor: [
+							'rgba(255, 99, 132, 1)',
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 206, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)',
+							'rgba(255, 159, 64, 1)',
+							'rgba(95, 146, 109, 1)'
+						],
+						borderWidth: 1
+					}]
+				},
+				options: {
+					responsive: true,
+					title: {
+					display: true,
+					text: "Summary followers by months",
+					},
+					legend: {
+					display: false
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					}
+				}
+			});
+
+
+			var ctx = document.getElementById("groupsChart").getContext('2d');
+			var groupChart = new Chart(ctx, {
+				type: 'doughnut',
+				data: {
+					labels: ["formed and aktive", "formed and inactive", "Join and active", "join and inactive"],
+					datasets: [{
+						label: 'amount',
+						data: [{{$dibuatAktif}}, {{$dibuatInaktif}}, {{$bergabungAktif}}, {{$bergabungInaktif}} ],
+						backgroundColor: [
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 99, 132, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(255, 159, 64, 1)',
+						],
+						borderColor: [
+						'rgba(54, 162, 235, 1)',
+						'rgba(255, 99, 132, 1)',
+						'rgba(255, 206, 86, 1)',
+						'rgba(75, 192, 192, 1)',
+						'rgba(255, 159, 64, 1)',
+						],
+						borderWidth: 1
+					}]
+				},
+				options: {
+					responsive: true,
+					title: {
+						display: true,
+						text: "User's group statistics",
+					},
+					legend: {
+						display: false
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero:true
+							}
+						}]
+					},
+				}
+			});
+
+
+
+		});
+	</script>
 @endsection

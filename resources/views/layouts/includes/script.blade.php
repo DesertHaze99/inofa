@@ -19,3 +19,4 @@
 
 @yield('script')
 @stack('script')
+@stack('js')

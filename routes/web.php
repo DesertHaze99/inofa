@@ -11,10 +11,14 @@
 |
 */
 
+// dashboard
 Route::get('/', 'DashboardController@index');
 Route::get('/penggunaAjax','DashboardController@penggunaAjax');
 
 
 // pengguna
 Route::resource('pengguna','PenggunaController');
+
+// inovasi
+Route::resource('inovasi','InovasiController');
 

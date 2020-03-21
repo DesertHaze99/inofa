@@ -2,6 +2,7 @@
 
 namespace App;
 
+
 use Illuminate\Database\Eloquent\Model;
 
 class Inovasi extends Model
@@ -28,5 +29,14 @@ class Inovasi extends Model
         return $this->hasOne('App\Pengguna', 'id_pengguna', 'pengguna_id');
     }
 
+    public function kategori()
+    {
+        return $this->hasOne('App\Kategori', 'id_kategori', 'kategori_id');
+    }
+
+    public function chats()
+    {
+        return $this->hasMany('App\Chats', 'inovasi_id', 'id_inovasi');
+    }
 
 }

@@ -54,6 +54,7 @@
 	<!-- Footer -->
 	@include('layouts.includes.footer')
 	<!-- /footer -->
+	
 		
 </body>
 </html>

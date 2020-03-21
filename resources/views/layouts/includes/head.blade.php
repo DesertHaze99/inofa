@@ -14,4 +14,15 @@
 <link href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/css/components.min.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/css/colors.min.css') }}" rel="stylesheet" type="text/css">
 
+<style>
+    .tab-content>.tab-pane {
+        display: block;
+        height: 0;
+        overflow: hidden;
+    }
+    .tab-content>.tab-pane.active {
+        height: auto;
+    }
+</style>
+
 @yield('librariesCSS')

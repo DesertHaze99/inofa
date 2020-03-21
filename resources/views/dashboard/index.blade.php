@@ -41,7 +41,7 @@
 					<div class="media-body">
 						<div class="media-title font-weight-semibold" ><h1 class="mb-0 font-weight-black">Dashboard</h1></div>
 						<div class="font-size-xs opacity-50">
-							<h3><i class="icon-magazine font-size-sm"></i> inova</h3>
+							<h3>inova</h3>
 						</div>
 					</div>
 
@@ -107,7 +107,7 @@
 
 	<div class="content card margin">
 		<div class="card-header">
-			<a class="btn btn-primary" href=""><i class="far fa-plus-square mr-2"></i>Tambah merk dagang baru</a>
+			<a class="btn btn-primary" href=""><i class="far fa-plus-square mr-2"></i>Tambah user baru</a>
 		</div>
 		<div class="card-body">
 			<!-- Basic datatable -->
@@ -115,37 +115,16 @@
 					<thead>
 						<tr>
 							<th>Profile Picture</th>
-							<th>Username</th>
-							<th>First Name</th>
-							<th>Last Name</th>
+							<th>Display Name</th>
 							<th>Email</th>
 							<th>Rating</th>
+							<th></th>
+							<th></th>
 							{{-- <th class="text-center">Actions</th> --}}
 						</tr>
 					</thead>
 					<tbody>
-						{{-- <tr>
-							<td>Marth</td>
-							<td><a href="#">Enright</a></td>
-							<td>Traffic Court Referee</td>
-							<td>22 Jun 1972</td>
-							<td><span class="badge badge-success">Active</span></td>
-							<td class="text-center">
-								<div class="list-icons">
-									<div class="dropdown">
-										<a href="#" class="list-icons-item" data-toggle="dropdown">
-											<i class="icon-menu9"></i>
-										</a>
-
-										<div class="dropdown-menu dropdown-menu-right">
-											<a href="#" class="dropdown-item"><i class="icon-file-pdf"></i> Export to .pdf</a>
-											<a href="#" class="dropdown-item"><i class="icon-file-excel"></i> Export to .csv</a>
-											<a href="#" class="dropdown-item"><i class="icon-file-word"></i> Export to .doc</a>
-										</div>
-									</div>
-								</div>
-							</td>
-						</tr> --}}
+						
 					</tbody>
 				</table>
 			<!-- /basic datatable -->
@@ -181,12 +160,12 @@
                     {data: 'profile_picture', 'targets' : [0], 'render': function(data){
 						return '<img src="'+data+'" class="rounded-circle" width="40" height="40" alt="">'
 					}},
-                    {data: 'username', name: 'username'},
-					{data: 'first_name', name: 'first_name'},
-					{data: 'last_name', name: 'last_name'},
+                    {data: 'display_name', name: 'display_name'},
 					{data: 'email', name: 'email'},
 					{data: 'rating',name:'rating'},
 					{data: 'action', name: 'action', "orderable": false, "searchable": false}
+					{data : , name : },
+					{data : , name : },
                 ],
                 "fixedColumns": true,
             });
