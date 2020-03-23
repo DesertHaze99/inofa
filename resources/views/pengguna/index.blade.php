@@ -19,6 +19,12 @@
 
 	<script src="{{ asset('limitless/Template/layout_1/LTR/default/full/assets/js/app.js')}}"></script>
 	<script src="{{ asset('limitless/Template/global_assets/js/demo_pages/user_pages_profile_tabbed.js')}}"></script>
+
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/notifications/bootbox.min.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+	
+	<script src="{{('/')}}/assets/js/app.js"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/demo_pages/components_modals.js')}}"></script>
 	<!-- /theme JS files -->
 
 	<!-- chart js -->
@@ -29,6 +35,99 @@
 
 @section('content')
 
+@if ($errors->any())
+	<!-- Danger modal -->
+	<div id="alertModal" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-danger">
+					<h6 class="modal-title">Error !</h6>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					<h6 class="font-weight-semibold">Ada masalah : </h6>
+					<ul>
+						@foreach ($errors->all() as $error)
+							<li>{{ $error }}</li>
+						@endforeach
+					</ul>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /default modal -->
+	<script>
+		$(function() {
+			$('#alertModal').modal('show');
+		});	
+	</script>
+
+@endif
+
+@if (session('success'))
+	<!-- Danger modal -->
+	<div id="alertModal" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-primary">
+					<h6 class="modal-title">Success !</h6>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					{{ session('success') }}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /default modal -->
+	<script>
+		$(function() {
+			$('#alertModal').modal('show');
+		});	
+	</script>
+
+@endif
+
+@if (session('error'))
+	<!-- Danger modal -->
+	<div id="alertModal" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-danger">
+					<h6 class="modal-title">Error !</h6>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<div class="modal-body">
+					{{ session('error') }}
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /default modal -->
+	<script>
+		$(function() {
+			$('#alertModal').modal('show');
+		});	
+	</script>
+
+@endif
+
+
 <div class="page-content">
 		<!-- Main content -->
 		<div class="content-wrapper">
@@ -38,7 +137,7 @@
                 <div class="page-header page-header-light">
                     <div class="page-header-content header-elements-md-inline">
                         <div class="page-title d-flex">
-                            <h1><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">User Pages</span> - {{$detailPengguna->username}}</h1>
+                            <h1><i class="icon-arrow-left52 mr-2"></i> <span class="font-weight-semibold">User Detail Information</span> - {{$pengguna->display_name}}</h1>
                             <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
                         </div>
                     </div>
@@ -47,7 +146,7 @@
                         <div class="d-flex">
                             <div class="breadcrumb">
                                 <a href="{{url('/')}}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i> Home</a>
-                                <span class="breadcrumb-item active">{{$detailPengguna->username}}</span>
+                                <span class="breadcrumb-item active">{{$pengguna->display_name}}</span>
                             </div>
 
                             <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
@@ -89,7 +188,7 @@
 							<div class="card">
 								<div class="card-body bg-indigo-400 text-center card-img-top" style="background-image: url({{url('/')}}/limitless/Template/global_assets/images/backgrounds/panel_bg.png); background-size: contain;">
 									<div class="card-img-actions d-inline-block mb-3">
-                                    <img class="img-fluid rounded-circle" src="{{url('/')}}/{{$detailPengguna->profile_picture}}" width="170" height="170" alt="">
+                                    <img class="img-fluid rounded-circle" src="{{url('/')}}/{{$pengguna->profile_picture}}" width="170" height="170" alt="">
 										<div class="card-img-actions-overlay rounded-circle">
 											<a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
 												<i class="icon-plus3"></i>
@@ -100,8 +199,8 @@
 										</div>
 									</div>
 
-                                <h6 class="font-weight-semibold mb-0">{{$detailPengguna->username}}</h6>
-						    		<span class="d-block opacity-75">{{$detailPengguna->email}}</span>
+                                <h6 class="font-weight-semibold mb-0">{{$pengguna->display_name}}</h6>
+						    		<span class="d-block opacity-75">{{$pengguna->email}}</span>
 
 					    			<div class="list-icons list-icons-extended mt-3">
 				                    	<a href="#" class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body" data-original-title="Google Drive"><i class="icon-google-drive"></i></a>
@@ -259,24 +358,26 @@
 								</div>
 								
 								<div class="card-body">
-									<form action="#">
+									<form action="{{Route('pengguna.update', $pengguna->id_pengguna)}}" method="post" enctype="multipart/form-data">
+										{{ csrf_field() }}
+										{{ method_field('PUT') }}
 										<div class="row">
 											<div class="col-md-6">
 												<fieldset>
 													
 													<div class="form-group">
 														<label>Username:</label>
-														<input type="text" class="form-control" value="{{$detailPengguna->username}}" name="username">
+														<input type="text" class="form-control" value="{{$pengguna->display_name}}" name="display_name">
 													</div>
 
 													<div class="form-group">
 														<label>Website :</label>
-														<input type="text" class="form-control" value="{{$detailPengguna->website}}" name="website">
+														<input type="text" class="form-control" value="{{$pengguna->website}}" name="website">
 													</div>
 													
 													<div class="form-group">
 														<label>Short Description:</label>
-														<textarea rows="5" cols="5" class="form-control" name="short_desc">{{$detailPengguna->short_desc}}</textarea>
+														<textarea rows="5" cols="5" class="form-control" name="short_desc">{{$pengguna->short_desc}}</textarea>
 													</div>
 												</fieldset>
 											</div>
@@ -287,15 +388,8 @@
 													<div class="row">
 														<div class="col-md-6">
 															<div class="form-group">
-																<label>First name:</label>
-																<input type="text" value="{{$detailPengguna->first_name}}" class="form-control">
-															</div>
-														</div>
-
-														<div class="col-md-6">
-															<div class="form-group">
-																<label>Last name:</label>
-																<input type="text" value="{{$detailPengguna->last_name}}" name="last_name" class="form-control">
+																<label>Pendidikan:</label>
+																<input type="text" value="{{$pengguna->pendidikan}}" name="pendidikan" class="form-control">
 															</div>
 														</div>
 													</div>
@@ -304,14 +398,14 @@
 														<div class="col-md-6">
 															<div class="form-group">
 																<label>Email:</label>
-																<input type="text" value="{{$detailPengguna->email}}" name="email" class="form-control">
+																<input type="text" value="{{$pengguna->email}}" name="email" class="form-control">
 															</div>
 														</div>
 
 														<div class="col-md-6">
 															<div class="form-group">
 																<label>Phone :</label>
-																<input type="text" value="{{$detailPengguna->no_telp}}" name="no_telp" class="form-control">
+																<input type="text" value="{{$pengguna->no_telp}}" name="no_telp" class="form-control">
 															</div>
 														</div>
 													</div>
@@ -350,7 +444,7 @@
 											function initMap(){
 
 											var locations = [
-												['Provinsi DI Yogyakarta = 0', -7.8753849, 110.4262088, 5]
+												['Lokasi Pengguna', $pengguna->longitude, $pengguna->latitude, 5]
 											];
 
 											var map = new google.maps.Map(document.getElementById('map'), {
@@ -459,10 +553,10 @@
 											<li class="media bg-light font-weight-semibold py-2">All friends</li>
 											@foreach($mutual as $dataMutual)
 												<li>
-													<a href="{{URL::to('/pengguna/'.$dataMutual->id_detail_pengguna.'')}}" class="media">
+													<a href="{{URL::to('/pengguna/'.$dataMutual->id_pengguna.'')}}" class="media">
 														<div class="mr-3"><img src="{{url('/')}}/{{$dataMutual->profile_picture}}" class="rounded-circle" width="40" height="40" alt=""></div>
 														<div class="media-body">
-															<div class="media-title font-weight-semibold">{{$dataMutual->username}}</div>
+															<div class="media-title font-weight-semibold">{{$dataMutual->display_name}}</div>
 															<span class="text-muted">{{$dataMutual->rating}}</span>
 														</div>
 														<div class="align-self-center ml-3 text-nowrap">
@@ -1019,7 +1113,7 @@
 									<table class="table text-nowrap">
 										<tbody>
 											<tr class="table-active">
-											<td colspan="7" class="font-weight-semibold">Made by : {{$detailPengguna->username}}</td>
+											<td colspan="7" class="font-weight-semibold">Made by : {{$pengguna->display_name}}</td>
 												<td class="text-right">
 													<span class="badge bg-secondary badge-pill">{{$dibuatAktif + $dibuatInaktif }}</span>
 												</td>
@@ -1066,10 +1160,8 @@
 											@endforeach
 
 
-
-
 											<tr class="table-active">
-												<td colspan="7" class="font-weight-semibold"> {{$detailPengguna->username}} has joined</td>
+												<td colspan="7" class="font-weight-semibold"> {{$pengguna->display_name}} has joined</td>
 													<td class="text-right">
 														<span class="badge bg-secondary badge-pill">{{$bergabungAktif + $bergabungInaktif }}</span>
 													</td>
@@ -1118,6 +1210,7 @@
 											
 										</tbody>
 									</table>
+									
 								</div>
 							</div>
 							<!-- /orders history -->

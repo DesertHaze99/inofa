@@ -19,6 +19,41 @@
 
 
 @section('content')
+
+@if ($errors->any())
+	<div class="box-body col-12 col-md-12 col-lg-12">
+		<div class="alert alert-danger alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4><i class="icon fa fa-ban"></i> Error!</h4>
+			<ul>
+				@foreach ($errors->all() as $error)
+					<li>{{ $error }}</li>
+				@endforeach
+			</ul>
+		</div>
+	</div>
+@endif
+
+@if (session('success'))
+	<div class="box-body">
+		<div class="alert alert-success alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4><i class="icon fa fa-ban"></i> Success!</h4>
+				{{ session('success') }}
+		</div>
+	</div>
+@endif
+
+@if (session('error'))
+	<div class="box-body">
+		<div class="alert alert-danger alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+			<h4><i class="icon fa fa-ban"></i> Error!</h4>
+				{{ session('error') }}
+		</div>
+	</div>
+@endif
+
 <div class="row">
 	<div class="sidebar sidebar-light sidebar-main sidebar-expand-md align-self-start margin">
 		<!-- Sidebar mobile toggler -->
@@ -111,16 +146,15 @@
 		</div>
 		<div class="card-body">
 			<!-- Basic datatable -->
-				<table id="tablePengguna" class="table datatable-basic">
+				<table id="tablePengguna" class="table datatable-basic datatable-column-search-inputs table-hover datatable-highlight dataTable ">
 					<thead>
 						<tr>
 							<th>Profile Picture</th>
 							<th>Display Name</th>
 							<th>Email</th>
+							<th>no_telp</th>
 							<th>Rating</th>
-							<th></th>
-							<th></th>
-							{{-- <th class="text-center">Actions</th> --}}
+							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -162,10 +196,9 @@
 					}},
                     {data: 'display_name', name: 'display_name'},
 					{data: 'email', name: 'email'},
+					{data: 'no_telp',name:'no_telp'},
 					{data: 'rating',name:'rating'},
 					{data: 'action', name: 'action', "orderable": false, "searchable": false}
-					{data : , name : },
-					{data : , name : },
                 ],
                 "fixedColumns": true,
             });

@@ -439,7 +439,7 @@
 												</div>
 												<div class="col-md-6">
 													<label>Maker</label>
-													<input type="text" value="{{$inovasi->username}}" class="form-control">
+													<input type="text" value="{{$inovasi->display_name}}" class="form-control">
 												</div>
 											</div>
 										</div>

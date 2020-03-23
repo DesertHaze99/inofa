@@ -29,7 +29,7 @@ class InovasiController extends Controller
     {
 
         $inovasi = DB::table('inovasi')
-                    ->join('detail_pengguna', 'detail_pengguna.pengguna_id', '=', 'inovasi.pengguna_id')
+                    ->join('pengguna', 'pengguna.id_pengguna', '=', 'inovasi.pengguna_id')
                     ->where('id_inovasi', '=', $id)
                     ->first();
 

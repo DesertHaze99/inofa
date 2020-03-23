@@ -26,7 +26,8 @@ class Pengguna extends Model
         'short_desc',
         'longitude',
         'latitude',
-        'rating'
+        'rating',
+        'status'
     ];
 
     public function pendidikan()
