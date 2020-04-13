@@ -15,6 +15,7 @@ class Subscription extends Model
     protected $fillable = [
         'pengguna_id',
         'inovasi_id',
+        'status',
         'created_at',
         'updated-at'
     ];

@@ -3,16 +3,21 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use DB;
 use URL;
 use Auth;
 use session;
+use Exception;
 use App\Pengguna;
 use App\Inovasi;
 use App\Kategori;
 use App\Kemampuan;
+use App\KemampuanMapping;
 use App\Chats;
+use App\ChatMapping;
 use App\Pendidikan;
+use App\Subscription;
 
 class APIController extends Controller
 {
@@ -23,7 +28,7 @@ class APIController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function index()
+    public function allPengguna()
     {
         return Pengguna::all();
     }
@@ -39,22 +44,23 @@ class APIController extends Controller
 
         DB::beginTransaction();
         try {
-            $dataPengguna = Pengguna::all();
-            foreach($dataPengguna as $data){
-                if($data->email == $newSignuUp->email){
-                    return "Akun Anda sudah terdaftar";
-                }
+            $dataPengguna = Pengguna::where('email', '=', $newSignuUp->email)->get();
+            if(count($dataPengguna) > 1){
+                
+                return abort(405, 'Action denied');
+            } else {
+                $newUser = new Pengguna;
+                $newUser->display_name = $newSignuUp->display_name;
+                $newUser->profile_picture = $newSignuUp->profile_picture;
+                $newUser->id = $newSignuUp->id;
+                $newUser->email = $newSignuUp->email;
+                $newUser->save();
+                DB::commit();
+
+                return "SignUp berhasil dilakukan";
             }
 
-            $newUser = new Pengguna;
-            $newUser->display_name = $newSignuUp->display_name;
-            $newUser->profile_picture = $newSignuUp->profile_picture;
-            $newUser->id = $newSignuUp->id;
-            $newUser->email = $newSignuUp->email;
-            $newUser->save();
-            DB::commit();
-
-            return "SignUp berhasil dilakukan";
+           
         } catch (Exception $e) {
             DB::rollback();
 
@@ -82,6 +88,27 @@ class APIController extends Controller
         $kemampuan = Kemampuan::all();
     
         return $kemampuan;
+    }
+    
+    public function addKemampuan($id_pengguna, Request $request)
+    {
+        $this->validate($request,[
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $kemampuan = new KemampuanMapping;
+            $kemampuan->pengguna_id = $id_pengguna;
+            $kemampuan->kemampuan_id = $request->kemampuan_id;
+            $kemampuan->save();
+            DB::commit();
+
+            return "Data kemampuan berhasil ditambahkan";
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan saat menambah data kemampuan";
+        }
     }
 
     public function deleteUser($email)
@@ -172,7 +199,7 @@ class APIController extends Controller
         return $loc;
     }
 
-    public function sendChat(request $request)
+    public function sendChat( $id_pengguna, request $request)
     {
         $this->validate($request,[
             'content' => 'required',
@@ -181,7 +208,7 @@ class APIController extends Controller
         DB::beginTransaction();
         try {
             $chat = new Chats;
-            $chat->pengguna_id = $request->pengguna_id;
+            $chat->pengguna_id = $id_pengguna;
             $chat->inovasi_id = $request->inovasi_id;
             $chat->content = $request->content;
             $chat->status = 1;
@@ -193,6 +220,52 @@ class APIController extends Controller
             DB::rollback();
 
             return "Chat gagal dikirim";
+        }
+    }
+    
+    public function read( $id_chat, request $request)
+    {
+        $this->validate($request,[
+            'pengguna_id' => 'required',
+        ]);
+
+        DB::beginTransaction();
+        try {
+
+            $chatMapping = new ChatMapping;
+            $chatMapping->pengguna_id = $request->pengguna_id;
+            $chatMapping->chat_id = $id_chat;
+            $chatMapping->save();
+            DB::commit();
+
+            return "Chat terbaca";
+
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Chat gagal dibaca";
+        }
+    }
+    
+    public function readby( $id_chat, request $request)
+    {
+        $this->validate($request,[
+           
+        ]);
+
+        DB::beginTransaction();
+        try {
+
+            $readby = ChatMapping::join('pengguna', 'id_pengguna', '=', 'pengguna_id')
+                    ->where('chat_id', '=', $id_chat)
+                    ->get();
+                    
+
+            return $readby;
+
+        } catch (Exception $e) {
+
+            return "Ada kesalahan saat mengambil data";
         }
     }
     
@@ -293,10 +366,86 @@ class APIController extends Controller
         }
     }
     
+    public function requestJoin($id_pengguna, Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            
+            $find = Subscription::where('pengguna_id', '=', $id_pengguna)->where('inovasi_id', '=', $request->inovasi_id)->get();
+
+            if(count($find) >= 1 ){
+                return abort(403, 'Unauthorized action.');
+            } else {
+                $subs = new Subscription;
+                $subs->pengguna_id = $id_pengguna;
+                $subs->inovasi_id = $request->inovasi_id;
+                $subs->save();
+                DB::commit();
+                
+                return "Permintaan telah  terkirim";
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan saat mencob bergabung";
+        }
+    }
+    
+    public function grantJoin($id_pengguna, Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            $subs = Subscription::where('pengguna_id', '=', $id_pengguna)->where('inovasi_id', '=', $request->inovasi_id)->first();
+            if($subs->status == "anggota"){
+                return "Pengguna sudah manjadi anggota";
+            } else {
+                $subs->status = "anggota";
+                $subs->save();
+                DB::commit();
+                
+                return "Pengguna berhasil bergabung";
+            }
+            
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan saat mengirim permintaan";
+        }
+    }
+    
     public function pendidikan()
     {
         $pendidikan = Pendidikan::all();
 
         return $pendidikan;
     }
+
+    public function allInovasi()
+    {
+        $pendidikan = Inovasi::all();
+
+        return $pendidikan;
+    }
+    
+    public function allMember($id_inovasi, Request $request)
+    {
+        $inovasi = Inovasi::find($id_inovasi)->first();
+
+        $member = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')->where('inovasi_id', $id_inovasi)->where('subscription.status','=', 'anggota')->get();
+
+        return $member;
+    }
+    
+    public function requestMember($id_inovasi, Request $request)
+    {
+        $inovasi = Inovasi::find($id_inovasi)->first();
+
+        $member = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')->where('inovasi_id', $id_inovasi)->where('subscription.status','=', 'pending')->get();
+
+        return $member;
+    }
+    
+    
 }
