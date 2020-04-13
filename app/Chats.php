@@ -25,5 +25,9 @@ class Chats extends Model
    {
        return $this->belongsTo('App\Inovasi', 'inovasi_id', 'id_inovasi');
    }
+   public function ChatMapping()
+   {
+       return $this->hasMany('App\ChatMapping', 'chat_id', 'id_chat');
+   }
 
 }
