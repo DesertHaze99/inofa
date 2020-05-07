@@ -13,12 +13,26 @@
 
 // dashboard
 Route::get('/', 'DashboardController@index');
-Route::get('/penggunaAjax','DashboardController@penggunaAjax');
+
+//akun
+Route::get('/akun', 'PenggunaController@index');
+Route::get('/penggunaAjax','PenggunaController@penggunaAjax');
+
+//ide
+Route::get('/ide', 'IdeController@index');
+Route::get('/ideAjax','IdeController@ideAjax');
+
+//group
+Route::get('/group', 'GroupController@index');
+Route::get('/groupAjax','GroupController@groupAjax');
 
 
 // pengguna
-Route::resource('pengguna','PenggunaController');
+Route::resource('akun','PenggunaController');
 
 // inovasi
-Route::resource('inovasi','InovasiController');
+Route::resource('group','GroupController');
+
+// inovasi
+Route::resource('ide','IdeController');
 

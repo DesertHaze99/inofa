@@ -8,9 +8,13 @@ use URL;
 use Auth;
 use session;
 use Datatables;
-use App\Pengguna;
+
 use Carbon\Carbon;
 use App\Inovasi;
+use App\Pengguna;
+use App\Chats;
+use App\Kategori;
+use App\Subscription;
 
 class DashboardController extends Controller
 {
@@ -21,32 +25,31 @@ class DashboardController extends Controller
     
     public function index()
     {
+        $pengguna = Pengguna::all();
+        $jmlPengguna = count($pengguna)-1;
+
+        $group = Inovasi::all();
+        $jmlGroup = count($group);
+
+        $diskusi = Chats::where('pengguna_id', '!=', -1)->get();
+        $jmlDiskusi = count($diskusi);
+
+        $kategori = Kategori::all();
+
+        $dataPengguna = Pengguna::where('id_pengguna','!=', -1)
+                    ->orderBy('created_at','ASC')
+                    ->limit(16)->get();
     	
-    	return view('dashboard.index');
+    	return view('dashboard.index', compact('jmlPengguna', 'jmlGroup', 'jmlDiskusi', 'kategori', 'dataPengguna'));
     }
 
-    //ajax datatable
-    public function penggunaAjax()
+
+
+
+    public function inovasi()
     {
-        $data  = Pengguna::all();
-
-        $listKategori ='';
-        // return $data;
-        return datatables()->of($data)
-            ->addColumn('ava',function($data){
-                $button = '';
-                $button .= '<img src="'.$data->profile_picture.'" >';
-                return $button;
-            })
-            ->addColumn('action',function($data){
-                $button = '';
-                $button .= '<form id="myform" method="post" action="">
-                                '.csrf_field().'
-                                <a type="button" href="'.URL::to('/pengguna/'.$data->id_pengguna.'').'" class="btn bg-teal-400 btn-labeled btn-labeled-left rounded-round"><b><i class="icon-file-presentation"></i></b> Detail</a>
-                            </form>';
-                return $button;
-            })
-            ->removeColumn('updated_at','added_by')
-            ->make(true);
+    	return view('dashboard.inovasiIndex');
     }
+
+    
 }
