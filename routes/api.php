@@ -41,6 +41,7 @@ Route::get('getLocation/{email}', 'APIController@getLocation'); // get user loca
 //API chat
 Route::post('send/{id_pengguna}', 'APIController@sendChat'); // send Chat
 Route::post('/chat/{id_chat}', 'APIController@deleteChat'); // delete a chat
+Route::get('/allChat/{id_inovasi}', 'APIController@allChat'); // get all chat from inovasi
 Route::post('/read/{id_chat}', 'APIController@read'); // a spesific user read a chat
 Route::get('/readby/{id_chat}', 'APIController@readby'); // get all users who read a specific chat
 

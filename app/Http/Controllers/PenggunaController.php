@@ -22,7 +22,27 @@ class PenggunaController extends Controller
      */
     public function index(Request $request)
     {
-        return view('pengguna.index');
+        return view('akun.index');
+    }
+
+    //ajax datatable
+    public function penggunaAjax()
+    {
+        $data  = Pengguna::where('status','!=',-1)->get();
+
+        $listKategori ='';
+        // return $data;
+        return datatables()->of($data)
+            ->addColumn('action',function($data){
+                $button = '';
+                $button .= '<form id="myform" method="post" action="">
+                                '.csrf_field().'
+                                <a type="button" href="'.URL::to('/akun/'.$data->id_pengguna.'').'" class="btn btn-outline-primary border-transparent"><b><i class="icon-arrow-right8"></i></b></a>
+                            </form>';
+                return $button;
+            })
+            ->removeColumn('updated_at','added_by')
+            ->make(true);
     }
 
     public function show($id)
@@ -37,26 +57,26 @@ class PenggunaController extends Controller
 
         $dibuatAktif = count(DB::table('inovasi')
                     ->where('pengguna_id', '=', $id)
-                    ->where('status', '=', 1)
+                    ->where('inovasi.status', '=', 1)
                     ->get()            
         );
         $dibuatInaktif =count(DB::table('inovasi')
                     ->where('pengguna_id', '=', $id)
-                    ->where('status', '=', 0)
+                    ->where('inovasi.status', '=', 0)
                     ->get() 
         );
         
         $bergabungAktif = count(DB::table('subscription')
                     ->join('inovasi', 'inovasi_id', '=', 'id_inovasi')
                     ->where('subscription.pengguna_id', '=', $id)
-                    ->where('status', '=', 1)
+                    ->where('inovasi.status', '=', 1)
                     ->get() 
         );
 
         $bergabungInaktif = count(DB::table('subscription')
                     ->join('inovasi', 'inovasi_id', '=', 'id_inovasi')
                     ->where('subscription.pengguna_id', '=', $id)
-                    ->where('status', '=', 0)
+                    ->where('inovasi.status', '=', 0)
                     ->get() 
         );
 
@@ -67,7 +87,7 @@ class PenggunaController extends Controller
 
         $i=0;
                     
-        return view('pengguna.index', compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif','bergabungAktif', 'bergabungInaktif', 'mutual')); 
+        return view('akun.pengguna.index', compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif','bergabungAktif', 'bergabungInaktif', 'mutual')); 
     }
 
 

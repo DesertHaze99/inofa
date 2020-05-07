@@ -1,4 +1,4 @@
-<div class="navbar navbar-expand-md navbar-dark">
+<div class="navbar navbar-expand-md navbar-light">
 	<div class="navbar-brand wmin-200" style="margin-left:5%">
 		<a href="{{URL::to('/')}}" class="d-inline-block">
 			<img src="{{ asset('limitless/Template/global_assets/images/logo_light.png')}}" alt="" style="width:10%;height:10%">
@@ -13,6 +13,9 @@
 		<button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
 			<i class="icon-paragraph-justify3"></i>
 		</button>
+		<button class="navbar-toggler sidebar-mobile-component-toggle" type="button">
+			<i class="icon-unfold"></i>
+		</button>
 	</div>
 
 	<div class="collapse navbar-collapse" id="navbar-mobile">
@@ -24,8 +27,8 @@
 
 			<li class="nav-item dropdown dropdown-user">
 				<a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
-					<img src="{{url('/')}}/limitless/Template/global_assets/images/placeholders/placeholder.jpg" class="rounded-circle mr-2" height="34" alt="">
-					<span>Victoria</span>
+					<img src="{{url('/')}}/upload/image/theking.jpeg" class="rounded-circle mr-2" height="34" alt="">
+					<span>King of Versailes</span>
 				</a>
 				
 				<div class="dropdown-menu dropdown-menu-right">

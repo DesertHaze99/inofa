@@ -30,7 +30,7 @@ class APIController extends Controller
 
     public function allPengguna()
     {
-        return Pengguna::all();
+        return Pengguna::join('pendidikan','pendidikan.id_pendidikan', '=', 'pengguna.pendidikan')->get();
     }
     
     public function signUp( request $newSignuUp  )
@@ -47,7 +47,7 @@ class APIController extends Controller
             $dataPengguna = Pengguna::where('email', '=', $newSignuUp->email)->get();
             if(count($dataPengguna) > 1){
                 
-                return abort(405, 'Action denied');
+                return "User sudah terdaftar";
             } else {
                 $newUser = new Pengguna;
                 $newUser->display_name = $newSignuUp->display_name;
@@ -269,6 +269,24 @@ class APIController extends Controller
         }
     }
     
+    public function allChat( $id_inovasi)
+    {
+
+        DB::beginTransaction();
+        try {
+
+            $allChat = Chats::join('pengguna', 'id_pengguna', '=', 'pengguna_id')
+                    ->where('inovasi_id', '=', $id_inovasi)
+                    ->get();
+                    
+            return $allChat;
+
+        } catch (Exception $e) {
+
+            return "Ada kesalahan saat mengambil data";
+        }
+    }
+    
     public function deleteChat($id_chat)
     {
 
@@ -307,6 +325,14 @@ class APIController extends Controller
             $inovasi->description = $request->description;
             $inovasi->thumbnail = $request->thumbnail;
             $inovasi->save();
+
+            $chat = new Chats;
+            $chat->pengguna_id = -1;
+            $chat->inovasi_id = $inovasi->inovasi_id;
+            $chat->content = "Group baru telah dibuat";
+            $chat->status = 1;
+            $chat->save();
+
             DB::commit();
             
             return "Inovasi berhasil dibuat";
@@ -401,8 +427,14 @@ class APIController extends Controller
             if($subs->status == "anggota"){
                 return "Pengguna sudah manjadi anggota";
             } else {
+                $inovasi = Inovasi::where('id_inovasi', '=', $request->inovasi_id)->first();
+                $inovasi->jml_anggota =  $inovasi->jml_anggota + 1;
+                $inovasi->save();
+
                 $subs->status = "anggota";
                 $subs->save();
+
+                
                 DB::commit();
                 
                 return "Pengguna berhasil bergabung";
