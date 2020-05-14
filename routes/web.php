@@ -11,6 +11,11 @@
 |
 */
 
+Auth::routes();
+Route::get('/home', 'DashboardController@index')->name('home');
+
+
+
 // dashboard
 Route::get('/', 'DashboardController@index');
 
@@ -35,4 +40,3 @@ Route::resource('group','GroupController');
 
 // inovasi
 Route::resource('ide','IdeController');
-

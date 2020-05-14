@@ -1,162 +1,80 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-	
-	
-	@include('layouts.includes.head')
-	@yield('header')
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	@include('layouts.includes.script')
-	
-	<style>
-		.navbar-light{
-			border: 2px solid white;
-		}
-		.margin{
-			margin-top: 1%;
-		}
-		body{
-			background-color: #f3f6fc;	
-		}
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-		.activeTab{
-			background-color: #2868e3;
-			color: white;
-			border-radius: 10px;
-			width: 65%;
-		}
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-		.innactiveTab{
-			color: black;
-			border-radius: 10px;
-			width: 65%;
-		}
-		
-		.badgeLeft{
-			background-color: #2868e3;
-			color: white;
-			width: 10px;
-			border-radius: 10px;
-		}
-		
-		.badgeLeftInnactive{
-			background-color: white;
-			color: white;
-			width: 10px;
-			border-radius: 10px;
-		}
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
-		.spaceBetween{
-			background-color: white;
-			width: 50px;
-			color: white;
-		}
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-		.row{
-			width: 100%;
-		}
-
-		table{
-			border-radius: 10px;
-			background-color: white;
-		}
-		
-		thead{
-			background-color: #2868e3;
-			color: white;
-			border-radius: 10px;
-		}
-		
-		.card .badge{
-			border-radius: 10px;
-			border: 1px solid white;
-		}
-
-		#contentDeep{
-			margin-top: 1%;
-		}
-
-		.btn-primary{
-			background-color: #2868e3;
-		}
-
-		.tab-content{
-			height: 600px;
-			overflow-y: hidden;
-		}
-
-		.tab-content::-webkit-scrollbar{
-			display: none;
-		}
-
-		.bg-myBlue {
-			  background-color: #2868e3; 
-		}
-
-		.bg-myOrange {
-			  background-color: #fbbb6a; 
-		}
-
-		.bg-myPink {
-			  background-color: #f7a393; 
-		}
-
-		.bg-darkBlue {
-			  background-color: #004460; 
-		}
-
-		.bg-myTeal {
-			  background-color: #bce3e6; 
-		}
-
-		.myRounded{
-			border-radius: 10px;
-		}
-
-		#bannerFlag{
-			background-color: white;
-		}
-
-		#customSidebar{
-			height:90vh;
-		}
-
-
-
-	</style>
-
+    <!-- Styles -->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-
 <body>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-	<!-- Main navbar -->
-	@include('layouts.includes.navbar') 
-	<!-- /main navbar -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
 
-	<div class="page-content pt-0">
-		<!-- Main sidebar -->
-		@include('layouts.includes.menu')
-		<!-- /main sidebar -->
+                    </ul>
 
-		<!-- Main content -->
-		<div class="content-wrapper col-md-10">
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Authentication Links -->
+                        @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>
+                            @endif
+                        @else
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }} <span class="caret"></span>
+                                </a>
 
-			<!-- Content area -->
-			<div class="content" >
-				@yield('content')
-			</div>
-			<!-- /content area -->
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
 
-		</div>
-		<!-- /main content -->
-	</div>
-	<!-- /page content -->
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
+                                </div>
+                            </li>
+                        @endguest
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-
-	<!-- Footer -->
-	 {{-- @include('layouts.includes.footer') --}}
-	<!-- /footer -->
-	
-		
+        <main class="py-4">
+            @yield('content')
+        </main>
+    </div>
 </body>
 </html>

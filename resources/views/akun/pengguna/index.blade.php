@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.primary')
 
 @section('librariesCSS')
     <script href="{{ asset('limitless/Template/global_assets/js/plugins/extensions/rowlink.js') }}"></script>
