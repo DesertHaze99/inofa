@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.primary')
 
 @section('head')
 	<!-- Core JS files -->

@@ -28,13 +28,19 @@
 			<li class="nav-item dropdown dropdown-user">
 				<a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
 					<img src="{{url('/')}}/upload/image/theking.jpeg" class="rounded-circle mr-2" height="34" alt="">
-					<span>King of Versailes</span>
+					<h6 class="mb-0 font-weight-semibold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h6>
 				</a>
 				
 				<div class="dropdown-menu dropdown-menu-right">
-					<a href="#" class="dropdown-item"><i class="icon-user-plus"></i> My profile</a>
-					<a href="#" class="dropdown-item"><i class="icon-cog5"></i> Account settings</a>
-					<a href="#" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
+					<a class="dropdown-item" href="{{ route('logout') }}"
+						onclick="event.preventDefault();
+										document.getElementById('logout-form').submit();">
+						<i class="icon-switch2"></i> {{ __('Logout') }}
+					</a>
+
+					<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+						@csrf
+					</form>
 				</div>
 			</li>
 		</ul>

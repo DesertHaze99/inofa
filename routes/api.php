@@ -27,12 +27,15 @@ Route::get('kategori', 'APIController@chategoryList');
 //API kemampuan
 Route::get('kemampuan', 'APIController@kemmpuanList');
 Route::post('kemampuan/{id_pengguna}', 'APIController@addKemampuan'); // add kemampuan
+Route::get('kemampuan/{id_pengguna}', 'APIController@kemampuanUser'); // kemampuan user
 
 //API pengguna
 Route::get('pengguna', 'APIController@allPengguna'); // list pengguna
 Route::post('pengguna', 'APIController@create'); // create user
 Route::post('/pengguna/{email}', 'APIController@updateUser'); // update specific user
 Route::post('/hapus/{email}', 'APIController@deleteUser'); // delete specific user
+Route::get('/dibuat/{email}', 'APIController@inovasiDibuat'); // list inovasi yang dibuat user
+Route::get('/subscription/{email}', 'APIController@subscription'); // list inovasi dimana user bergabung
 
 //API location
 Route::post('setLocation/{email}', 'APIController@setLocation'); // set user location
@@ -44,7 +47,6 @@ Route::post('/chat/{id_chat}', 'APIController@deleteChat'); // delete a chat
 Route::get('/allChat/{id_inovasi}', 'APIController@allChat'); // get all chat from inovasi
 Route::post('/read/{id_chat}', 'APIController@read'); // a spesific user read a chat
 Route::get('/readby/{id_chat}', 'APIController@readby'); // get all users who read a specific chat
-
 
 
 //API inovasi
