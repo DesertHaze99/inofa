@@ -83,6 +83,47 @@ class APIController extends Controller
 
     }
     
+    public function updateProfile($email, request $request  )
+    {
+
+        DB::beginTransaction();
+        try {
+            $user = Pengguna::where('email', '=', $email)->first();
+
+
+            if($user){
+                $response = array();
+
+                $user->id = $user->id;
+                $user->display_name = $user->display_name;
+                $user->profile_picture = $request->profile_picture;
+                $user->email = $email;
+                
+                if ($user->save()) {
+                    DB::commit();
+                    $res['message'] = "Foto profil berhasil ditambahkan";
+                    $res['value'] = "$user";
+                    return response($res);
+                }
+                else{
+                    $res['message'] = "Data yang dimasukkan tidak sesuai permintaan";
+                    return response($res);
+                }
+                
+            } else {
+                
+                return "User tidak ditemukan";
+            }
+
+           
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan saat mengganti profile";
+        }
+
+    }
+    
     public function userLogedIn($email)
     {
         $user = Pengguna::join('pendidikan', 'pengguna.pendidikan', '=', 'pendidikan.id_pendidikan')->where('email', $email)->first();
