@@ -39,7 +39,7 @@
 <body style="background-color: #2868e3;">
 	
     <div class="limiter" style="background-color: white">
-		<div class="container-login100">
+		<div style="margin-top: -8vh" class="container-login100">
 			<div class="wrap-login100">
                 <form class="login100-form validate-form" method="POST" action="{{ route('register') }}">
                     @csrf
@@ -56,14 +56,17 @@
                         <div class="wrap-input100 validate-input" data-validate = "Nama Depan yang valid terdiri dari satu kata maksimal 100 huruf">
                             <input id="first_name" class="input100 form-control @error('first_name') is-invalid @enderror" value="{{ old('first_name') }}" autocomplete="first_name"  type="text" name="first_name">
                             <span class="focus-input100"></span>
-                            <span class="label-input100 "> Nama Depan</span>
+                            <span id="namaDepanPlaceholder" class="label-input100 "> Nama Depan</span>
 
                             @error('first_name')
-                                <span class="invalid-feedback" role="alert">
+                                <span style="font-size: 1.3vh" class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="separator d-flex align-items-center justify-content-center " style="height: 2vh">
                     </div>
 
                     <div class="d-flex align-items-center justify-content-center ">
@@ -71,14 +74,17 @@
                         <div class="wrap-input100 validate-input" data-validate = "Nama Belakang yang valid terdiri dari satu kata maksimal 100 huruf">
                             <input id="last_name" class="input100 form-control @error('last_name') is-invalid @enderror" value="{{ old('last_name') }}" autocomplete="last_name" type="text" name="last_name">
                             <span class="focus-input100"></span>
-                            <span class="label-input100 "> Nama Belakang</span>
+                            <span id="namaBelakangPlaceholder" class="label-input100 "> Nama Belakang</span>
 
                             @error('last_name')
-                                <span class="invalid-feedback" role="alert">
+                                <span style="font-size: 1.3vh" class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="separator d-flex align-items-center justify-content-center " style="height: 2vh">
                     </div>
 
                     <div class="d-flex align-items-center justify-content-center ">
@@ -86,14 +92,17 @@
                         <div class="wrap-input100 validate-input" data-validate = "Email yang valid berupa : emailvalid@inova.com">
                             <input id="email" class="input100 form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" autocomplete="email" type="email" name="email">
                             <span class="focus-input100"></span>
-                            <span class="label-input100 "> Email</span>
+                            <span id="emailPlaceholder" class="label-input100 "> Email</span>
 
                             @error('email')
-                                <span class="invalid-feedback" role="alert">
+                                <span style="font-size: 1.3vh" class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="separator d-flex align-items-center justify-content-center " style="height: 2vh">
                     </div>
 
                     <div class="d-flex align-items-center justify-content-center">
@@ -101,14 +110,17 @@
                         <div class="wrap-input100 validate-input" data-validate="Masukkan password!">
                             <input id="password" class="input100 form-control @error('password') is-invalid @enderror" autocomplete="new-password" type="password" name="password">
                             <span class="focus-input100"></span>
-                            <span class="label-input100">Password</span>
+                            <span id="passwordPlaceholder" class="label-input100">Password</span>
 
                             @error('password')
-                                <span class="invalid-feedback" role="alert">
+                                <span style="font-size: 1.3vh" class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="separator d-flex align-items-center justify-content-center " style="height: 2vh">
                     </div>
 
                     <div class="d-flex align-items-center justify-content-center">
@@ -119,11 +131,14 @@
                             <span class="label-input100">Konfirmasi Password</span>
 
                             @error('password')
-                                <span class="invalid-feedback" role="alert">
+                                <span style="font-size: 1.3vh" class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
+                    </div>
+
+                    <div class="separator d-flex align-items-center justify-content-center " style="height: 2vh">
                     </div>
 
                     <br>
@@ -134,7 +149,7 @@
                     <br>
                     <div class="d-flex align-items-center justify-content-center">
                         <div class="container-login100-form-btn">
-                            <button type="submit" class="login100-form-btn">
+                            <button style="font-size: 1.3vh" type="submit" class="login100-form-btn" style="min-width: 80px">
                                 {{ __('Register') }}
                             </button>
 					    </div>
@@ -170,7 +185,43 @@
 <!--===============================================================================================-->
 	<script src="{{ asset('loginRegister/vendor/countdowntime/countdowntime.js') }}"></script>
 <!--===============================================================================================-->
-	<script src="{{ asset('loginRegister/js/main.js') }}"></script>
+    <script src="{{ asset('loginRegister/js/main.js') }}"></script>
+    
+    <script>
+        var firstName = document.getElementById('first_name');
+        var lastName = document.getElementById('last_name');
+        var email = document.getElementById('email');
+        var password = document.getElementById('password');
+
+        if(firstName.value){
+            $("#namaDepanPlaceholder").hide();
+            $(".separator").show();
+        } else {
+            $("#namaDepanPlaceholder").show();
+        }
+
+        if(lastName.value){
+            $("#namaBelakangPlaceholder").hide();
+            $(".separator").show();
+        } else {
+            $("#namaBelakangPlaceholder").show();
+        }
+
+        if(email.value){
+            $("#emailPlaceholder").hide();
+            $(".separator").show();
+        } else {
+            $("#emailPlaceholder").show();
+        }
+
+        if(password.value){
+            $("#passwordPlacehodler").hide();
+            $(".separator").show();
+        } else {
+            $("#passwordPlacehodler").show();
+        }
+
+    </script>
 
 </body>
 </html>

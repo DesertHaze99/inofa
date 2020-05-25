@@ -89,6 +89,10 @@
 			display: none;
 		}
 
+		.myBlue {
+			  color: #2868e3; 
+		}
+
 		.bg-myBlue {
 			  background-color: #2868e3; 
 		}
@@ -112,6 +116,76 @@
 		.myRounded{
 			border-radius: 10px;
 		}
+		
+		.myBorder{
+			border-color: #2868e3 !important;
+		}
+
+		.pengguna{
+			color: #f7a494;
+		}
+
+		.bg-pengguna{
+			background-color: #ffdbd4;
+			border: 1px solid #ffdbd4;
+		}
+
+		.group{
+			color: #2868e3;
+		}
+		
+		.bg-group{
+			background-color: #b3cbf9;
+			border: 1px solid #b3cbf9;
+		}
+
+		.ide{
+			color: #4db6ac;
+		}
+		
+		.bg-ide{
+			background-color: #bceae5;
+			border: 1px solid #bceae5;
+		}
+
+		.diskusi{
+			color: #fbbb6a;
+		}
+		
+		.bg-diskusi{
+			background-color: #ffe6c7;
+			border: 1px solid #ffe6c7;
+		}
+
+		#hover:hover #badgeIconSquare {
+			background-color: white;
+			border-radius: 10px;
+		}
+
+		#hover:hover  #badgeIcon{
+			color: #2868e3;
+		}
+
+		#hover:hover #badgeNew{
+			color: white;
+			border-color: white !important
+		}
+
+		#hover:hover #adminName{
+			color: white;
+		}
+
+		.hover:hover {
+			background-color: #2868e3;
+			color: white;
+			border-radius: 10px;
+			cursor: pointer;
+		}
+
+		.black{
+			color: black;
+		}
+
 
 		#bannerFlag{
 			background-color: white;

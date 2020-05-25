@@ -17,6 +17,7 @@ class Chats extends Model
         'pengguna_id',
         'inovasi_id',
         'content',
+        'media',
         'created_at',
         'status'
     ];

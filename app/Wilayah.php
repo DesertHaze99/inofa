@@ -4,18 +4,19 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kategori extends Model
+class Wilayah extends Model
 {
-    protected $table = 'kategori';
+    protected $table = 'wilayah';
 
-    protected $primaryKey = 'id_kategori';
+    protected $primaryKey = 'id_wilayah';
 
     public $timestamps = false;
 
     protected $fillable = [
-        'kategori',
-        'kategori_thumbnail',
-        'warna',
+        'propinsi',
+        'longitude',
+        'latitude',
+        'kabupaten',
         'jumlah'
     ];
 

@@ -30,13 +30,15 @@
                         <div class="card myRounded bg-white " id="profilePict">
                             <div class="card-body myRounded" style="background-image: url({{url('/')}}/upload/image/thumbnail.jpg); background-size: cover;height:15vh"></div>
                             <div class="text-center" style="margin-top:-9vh;">
-                                <a href="#" class="btn btn-lg btn-icon mb-3 mt-1 btn-outline text-white border-white bg-white rounded-round border-2" style="background-image: url({{url('/')}}{{$inovasi->thumbnail}});background-size: cover;height:13vh;width:13vh" ></a>
+                                <a href="#" class="btn btn-lg btn-icon mb-3 mt-1 btn-outline text-white border-white bg-white rounded-round border-2" style="background-image: url({{url('/')}}/{{$inovasi->thumbnail}});background-size: cover;height:13vh;width:13vh" ></a>
                             </div>
                             <div class="card-body text-center " style="margin-top:-3vh;">
                                 <h5 class="font-weight-bold">{{$inovasi->judul}}</h5>
-                                <span class="mb-0 font-weight-semibold text-primary margin">{{$inovasi->created_at}}</span>
+                                <small class="font-weight-semibold">{{$inovasi->tagline}}</small><br>
+                                <span class="mb-0 font-weight-semibold text-primary margin">{{ explode(" ", $inovasi->created_at)[0]}} </span>
                                 <p class="text-muted">
-                                   <small>Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum Lorem ipsum lorem ipsum </small> 
+                                   <small>{{ str_split($inovasi->description, 200)[0]}}</small><span>...</span>
+                                   
                                 </p>
                                 <hr>
                             </div>
@@ -46,8 +48,8 @@
                                 @foreach($anggota as $pengguna)
                                     <h6 class="mb-0 d-flex align-items-center justify-content-center ">
                                         <div class="col-md-1 py-2 px-3 ">
-                                            <a href="#" class="d-inline-block">
-                                                <img src="{{url('/')}}/{{$pengguna->profile_picture}}" class="rounded-circle" width="30" height="30"  alt="" >
+                                            <a href="{{URL::to('/akun/'.$pengguna->id_pengguna)}}" class="d-inline-block">
+                                                <img src="{{$pengguna->profile_picture}}"  style="object-fit: cover;" class="rounded-circle" width="30" height="30"  alt="" >
                                             </a>
                                         </div>
                                         <div class="col-md-11 px-3 py-1 ">
@@ -94,7 +96,7 @@
                                         <h6 class="mb-0 d-flex align-items-center justify-content-center ">
                                             <div class="col-md-1 py-1 px-3 ">
                                                 <a href="#" class="d-inline-block">
-                                                    <img src="{{url('/')}}{{$inovasi->thumbnail}}" class="rounded-circle" width="50" height="50"  alt="" >
+                                                    <img src="{{url('/')}}/{{$inovasi->thumbnail}}" class="rounded-circle" width="50" height="50"  alt="" >
                                                 </a>
                                             </div>
                                             <div class="col-md-11 px-3 py-1 ">
@@ -102,42 +104,54 @@
                                             </div>
                                         </h6>
 
-                                        <ul class="media-list media-chat media-chat-scrollable mb-3" style="border-top:1px solid grey">
+                                        <ul id="ruangObrolan" class="media-list media-chat media-chat-scrollable mb-3" style="border-top:1px solid grey">
                                             @foreach($chats as $chat)
-                                                @if(($chat->created_at != date("Y-m-d H:i:s")) )
-                                                    <li class="media content-divider justify-content-center text-muted mx-0">{{$chat->created_at}}</li>
-                                                
-                                                @else
+                                                @if((explode(" ", $chat->created_at)[0] != date("Y-m-d")))
+                                                    <li class="media content-divider justify-content-center text-muted mx-0">{{explode(" ", $chat->created_at)[0]}}</li>
+                                                @elseif(explode(" ", $chat->created_at)[0] == date("Y-m-d"))
                                                     <li class="media content-divider justify-content-center text-muted mx-0">Today</li>
                                                 @endif
                                                 
-                                                @if($chat->id_pengguna == -1)
+                                                @if($chat->pengguna_id == -1)
                                                     <li class="media content-divider justify-content-center text-muted mx-0">{{$chat->content}}</li>
-                                                @elseif($chat->id_pengguna == $temp)
+                                                @elseif($chat->pengguna_id == $inovasi->pengguna_id)
                                                 
                                                     <li class="media media-chat-item-reverse">
                                                         <div class="media-body">
-                                                            <div class="media-chat-item">{{$chat->content}}</div>
-                                                            <div class="font-size-sm text-muted mt-2">{{$chat->created_at}}<a href="#"></a></div>
+                                                            @if(!empty($chat->content) && !empty($chat->media))
+                                                                <div class="media-chat-item">{{$chat->content}}</div><br>
+                                                                <img src="{{url('/')}}/{{$chat->media}}" style="max-height: 15vh;border-radius:5px" alt="">
+                                                            @elseif(!empty($chat->content))
+                                                                <div class="media-chat-item">{{$chat->content}}</div>
+                                                            @else
+                                                                <img src="{{url('/')}}/{{$chat->media}}" style="max-height: 15vh;border-radius:5px" alt="">
+                                                            @endif
+                                                            <div class="font-size-sm text-muted mt-2">{{explode(" ", $chat->created_at)[0]}}<a href="#"></a></div>
                                                         </div>
 
                                                         <div class="ml-3">
                                                             <a href="{{url('/')}}/limitless/Template//global_assets/images/placeholders/placeholder.jpg">
-                                                                <img src="{{url('/')}}/{{$chat->profile_picture}}" class="rounded-circle" width="40" height="40" alt="">
+                                                                <img src="{{$chat->profile_picture}}" style="object-fit: cover;" class="rounded-circle" width="40" height="40" alt="">
                                                             </a>
                                                         </div>
                                                     </li>
                                                 @else
-
                                                     <li class="media">
                                                         <div class="mr-3">
                                                             <a href="{{url('/')}}/limitless/Template/global_assets/images/placeholders/placeholder.jpg">
-                                                                <img src="{{url('/')}}/{{url('/')}}{{$chat->profile_picture}}" class="rounded-circle" width="40" height="40" alt="">
+                                                                <img src="{{$chat->profile_picture}}"  style="object-fit: cover;" class="rounded-circle" width="40" height="40" alt="">
                                                             </a>
                                                         </div>
 
                                                         <div class="media-body">
-                                                            <div class="media-chat-item">{{$chat->content}}</div>
+                                                            @if(!empty($chat->content) && !empty($chat->media))
+                                                                <div class="media-chat-item">{{$chat->content}}</div><br>
+                                                                <img src="{{url('/')}}/{{$chat->media}}" style="max-height: 15vh;border-radius:5px" alt="">
+                                                            @elseif(!empty($chat->content))
+                                                                <div class="media-chat-item">{{$chat->content}}</div>
+                                                            @else
+                                                                <img src="{{url('/')}}/{{$chat->media}}" style="max-height: 15vh;border-radius:5px" alt="">
+                                                            @endif
                                                             <div class="font-size-sm text-muted mt-2">{{$chat->created_at}}<a href="#"></a></div>
                                                         </div>
                                                     </li>
@@ -152,19 +166,43 @@
     
                                     <div id="anggota" class="tab-pane fade">
                                         <div class="table-responsive">
-                                            dvesgweg
+                                            @foreach($anggota as $pengguna)
+                                            <div class="mb-0 row align-items-center justify-content-center " style="border-bottom: 1px solid #E5E5E5">
+                                                <div class="col-md-1 py-2 px-3 ">
+                                                    <a href="{{URL::to('/akun/'.$pengguna->id_pengguna)}}" class="d-inline-block">
+                                                        <img src="{{$pengguna->profile_picture}}" class="rounded-circle" width="30" height="30"  alt="" >
+                                                    </a>
+                                                </div>
+                                                <div class="col-md-4 px-3 py-2 ">
+                                                    <h6 href="{{URL::to('/akun/'.$pengguna->id_pengguna)}}" class="mb-0 px-1 font-weight-semibold">{{$pengguna->display_name}} </h6>
+                                                </div>
+                                                <div class="col-md-5 px-3 py-2 ">
+                                                    <span class="mb-0 px-1 font-weight-medium">{{$pengguna->email}} </span>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <a type="button" href="{{URL::to('/akun/'.$pengguna->id_pengguna)}}" class="btn btn-outline-primary border-transparent">
+                                                        <b><i class="icon-arrow-right8"></i></b>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            @endforeach
                                         </div>
                                     </div>
     
                                     <div id="media" class="tab-pane fade">
-                                      <h3>Menu 2</h3>
-                                      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                                      <h5 class="font-weight-bold margin">Media</h5>
+                                        <div class="row">
+                                        @foreach($chats as $chat)
+                                        <div class="col-sm">
+                                            <img src="{{url('/')}}/{{$chat->media}}" style="max-height: 15vh;border-radius:5px" alt="">
+                                        </div>
+                                        @endforeach
+                                        </div>
                                     </div>
 
                                     <div id="info" class="tab-pane fade">
-                                        <h3>Menu 2</h3>
-                                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
-                                      </div>
+                                        <h4 class="px-2 font-weight-bold margin">Tagline : {{$inovasi->tagline}}</h4><br>
+                                        <p style="text-indent: 50px;" class="text-justify mb-0 px-2 font-weight-medium">{{$inovasi->description}} </p>
                                   </div>
                                 
                             </div>
@@ -211,7 +249,12 @@
 			$("#group").show();
 			$("#groupInnactive").hide();
 			$("#groupMainButtonActive").show();
-			$("#groupMainButtonInnactive").hide();
+			$("#groupMainButtonInnactive").hide();  
+
+            var elmnt = document.getElementById("ruangObrolan");
+            var y = elmnt.scrollHeight;
+            
+            elmnt.scrollTop = 99999999999;
 
 		});
 	</script>

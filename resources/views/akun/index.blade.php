@@ -128,7 +128,7 @@
                 "dataSrc": "data",
                 "columns": [
                     {data: 'profile_picture', 'targets' : [0], 'render': function(data){
-						return '<img src="'+data+'" class="rounded-circle" width="40" height="40" alt="">'
+						return '<img src="'+data+'" class="rounded-circle"  style="object-fit: cover;" width="40" height="40" alt="">'
 					}},
                     {data: 'display_name', name: 'display_name'},
 					{data: 'email', name: 'email'},

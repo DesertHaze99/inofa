@@ -57,9 +57,9 @@ Route::get('inovasi', 'APIController@allInovasi'); // get all inovasi
 Route::get('member/{id_inovasi}', 'APIController@allMember'); // get semua user yang menjadi anggota grup sebuah inovasi
 Route::get('requestMember/{id_inovasi}', 'APIController@requestMember'); // get semua user yang mengirim permintaan bergabung anggota grup sebuah inovasi
 Route::post('/join/{id_pengguna}', 'APIController@requestJoin'); // request to join an inovasi(group chat)
-Route::post('/grantJoin/{id_pengguna}', 'APIController@grantJoin'); // grant join requestto an inovasi(group chat)
-Route::get('/invite/{id_inovasi}', 'APIController@inviteMember'); // membuat invitation untuk bergabung ke inovasi(group chat)
-
+Route::post('/grantJoin/{id_pengguna}', 'APIController@grantJoin'); // grant join request an inovasi(group chat)
+Route::post('/invite/{id_pengguna}', 'APIController@sendInvitation'); // mengirim invitation/undangan untuk bergabung ke inovasi(group chat)
+Route::post('/accept/{id_inovasi}', 'APIController@acceptInvitation'); // menerima invitation menjadi member
 
 //API pendidikan
 Route::get('pendidikan', 'APIController@pendidikan'); // get list pendidikan

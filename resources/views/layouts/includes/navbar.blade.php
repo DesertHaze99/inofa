@@ -13,22 +13,18 @@
 		<button class="navbar-toggler sidebar-mobile-main-toggle" type="button">
 			<i class="icon-paragraph-justify3"></i>
 		</button>
-		<button class="navbar-toggler sidebar-mobile-component-toggle" type="button">
-			<i class="icon-unfold"></i>
-		</button>
 	</div>
 
 	<div class="collapse navbar-collapse" id="navbar-mobile">
-		
 
-		<span class="badge bg-success-400 ml-md-auto mr-md-3">Active</span>
+		<span class="badge bg-success-400 ml-md-auto mr-md-2">Active</span>
 
 		<ul class="navbar-nav">
 
-			<li class="nav-item dropdown dropdown-user">
-				<a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
-					<img src="{{url('/')}}/upload/image/theking.jpeg" class="rounded-circle mr-2" height="34" alt="">
-					<h6 class="mb-0 font-weight-semibold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h6>
+			<li class="hover nav-item dropdown dropdown-user">
+				<a id="hover" href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
+					<img src="{{url('/')}}/upload/image/admin.png" class="rounded-circle mr-2" height="45" alt="">
+					<h6 id="adminName" class="mb-0 font-weight-semibold">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h6>
 				</a>
 				
 				<div class="dropdown-menu dropdown-menu-right">

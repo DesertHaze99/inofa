@@ -18,6 +18,7 @@ use App\Chats;
 use App\ChatMapping;
 use App\Pendidikan;
 use App\Subscription;
+use App\Wilayah;
 
 class APIController extends Controller
 {
@@ -52,15 +53,11 @@ class APIController extends Controller
                 $display_name = $newSignuUp->display_name;
                 $id = $newSignuUp->id;
                 $email = $newSignuUp->email;
-
-                $profile_picture = date('dmYHis').str_replace(" ","", basename($_FILES['profile_picture']['name']));
-                $imagePath = public_path()."/upload/profile/".$profile_picture;
-                $path = "upload/profile/".$profile_picture;
-                move_uploaded_file($_FILES['profile_picture']['tmp_name'],$imagePath);
+                $profile_picture = $request->profile_picture;
 
                 $newUser = new Pengguna;
                 $newUser->display_name = $display_name;
-                $newUser->profile_picture = $path;
+                $newUser->profile_picture = $profile_picture;
                 $newUser->id = $id;
                 $newUser->email = $email;
                 
@@ -137,7 +134,7 @@ class APIController extends Controller
         try {
             $kemampuan = KemampuanMapping::join('kemampuan', 'kemampuan_mapping.kemampuan_id', '=', 'kemampuan.id_kemampuan')
                                         ->where('pengguna_id', '=', $id_pengguna)
-                                        ->first();
+                                        ->get();
 
             return $kemampuan;
         } catch (Exception $e) {
@@ -172,24 +169,19 @@ class APIController extends Controller
             $no_telp = $request->no_telp;
             $short_desc = $request->short_desc;
 
-            $profile_picture = date('dmYHis').str_replace(" ","", basename($_FILES['profile_picture']['name']));
-            $imagePath = public_path()."/upload/profile/".$profile_picture;
-            $path = "upload/profile/".$profile_picture;
-            move_uploaded_file($_FILES['profile_picture']['tmp_name'],$imagePath);
-
             $pengguna = Pengguna::where('email', '=', $email)->first();
             $pengguna->display_name = $display_name;
-            $pengguna->profile_picture = $path;
+            $pengguna->profile_picture = $pengguna->profile_picture;
             $pengguna->pendidikan = $pendidikan;
             $pengguna->tgl_lahir = $tgl_lahir;
             $pengguna->website = $website;
             $pengguna->no_telp = $no_telp;
             $pengguna->short_desc = $short_desc;
             
-            if ($newUser->save()) {
+            if ($pengguna->save()) {
                 DB::commit();
                 $res['message'] = "Data pengguna berhasil diubah";
-                $res['value'] = "$newUser";
+                $res['value'] = "$pengguna";
                 return response($res);
             }
             else{
@@ -250,17 +242,45 @@ class APIController extends Controller
         $this->validate($requestLoc,[
             'longitude' => 'required',
             'latitude' => 'required',
+            'lokasi' => 'required',
         ]);
 
         DB::beginTransaction();
         try {
             $userLoc = Pengguna::where('email','=', $email)->first();
-            $userLoc->longitude = $requestLoc->longitude;
-            $userLoc->latitude = $requestLoc->latitude;
-            $userLoc->save();
-            DB::commit();
+            
+            if(!empty($userLoc->lokasi)){
+              $jmlWilayah = Wilayah::where('id_wilayah', '=', $userLoc->lokasi)->first();
+              $jmlWilayah->jumlah-=1;  
+              $jmlWilayah->save(); 
 
-            return "Lokasi berhasil ditambahkan";
+              $userLoc->longitude = $requestLoc->longitude;
+              $userLoc->latitude = $requestLoc->latitude;
+              $userLoc->lokasi = $requestLoc->lokasi;
+              $userLoc->save();
+              
+              $jmlWilayah = Wilayah::where('id_wilayah', '=', $requestLoc->lokasi)->first();
+              $jmlWilayah->jumlah+=1;  
+              $jmlWilayah->save();
+              DB::commit();
+
+              return "Lokasi berhasil ditambahkan";
+
+            } else {
+                $userLoc->longitude = $requestLoc->longitude;
+                $userLoc->latitude = $requestLoc->latitude;
+                $userLoc->lokasi = $requestLoc->lokasi;
+                $userLoc->save();
+                
+                $jmlWilayah = Wilayah::where('id_wilayah', '=', $requestLoc->lokasi)->first();
+                $jmlWilayah->jumlah+=1;  
+                $jmlWilayah->save();
+                DB::commit();
+
+                return "Lokasi berhasil ditambahkan";
+            }
+
+            
         } catch (Exception $e) {
             DB::rollback();
 
@@ -270,34 +290,40 @@ class APIController extends Controller
 
     public function getLocation($email)
     {
-        $userLoc = Pengguna::where('email', '=', $email)->first();
+        $userLoc = Pengguna::join('wilayah', 'id_wilayah', '=', 'propinsi')->where('email', '=', $email)->first();
 
-        $loc = [ $userLoc->longitude , $userLoc->latitude ];
+        $loc = [ $userLoc->longitude , $userLoc->latitude, $userLoc->propinsi, $userLoc->kabupaten];
 
         return $loc;
     }
 
     public function sendChat( $id_pengguna, request $request)
     {
-        $this->validate($request,[
-            'content' => 'required',
-        ]);
+        $response = array();
+        $inovasi_id = $request->inovasi_id;
+        $content = $request->content;
 
-        DB::beginTransaction();
-        try {
-            $chat = new Chats;
-            $chat->pengguna_id = $id_pengguna;
-            $chat->inovasi_id = $request->inovasi_id;
-            $chat->content = $request->content;
-            $chat->status = 1;
-            $chat->save();
+        $media = date('dmYHis').str_replace(" ","", basename($_FILES['media']['name']));
+        $imagePath = public_path()."/upload/media/".$media;
+        $path = "upload/media/".$media;
+        move_uploaded_file($_FILES['media']['tmp_name'],$imagePath);
+
+        $chat = new Chats;
+        $chat->pengguna_id = $id_pengguna;
+        $chat->inovasi_id = $inovasi_id;
+        $chat->content = $content;
+        $chat->media = $path;
+        $chat->status = 1;
+        
+        if ($chat->save()) {
             DB::commit();
-
-            return "Chat berhasil dikirim";
-        } catch (Exception $e) {
-            DB::rollback();
-
-            return "Chat gagal dikirim";
+            $res['message'] = "Chat berhasil dikirim";
+            $res['value'] = "$chat";
+            return response($res);
+        }
+        else{
+            $res['message'] = "Data yang dimasukkan tidak sesuai permintaan";
+            return response($res);
         }
     }
     
@@ -430,6 +456,10 @@ class APIController extends Controller
                     $chat->status = 1;
                     $chat->save();
 
+                    $kategorijml = Kategori::where('id_kategori', '=', $kategori_id)->first();
+                    $kategorijml->jumlah +=1;
+                    $kategorijml->save();
+
                     $res['message'] = "Inovasi baru berhasil dibuat";
                     $res['value'] = "$inovasi";
                     return response($res);
@@ -467,6 +497,11 @@ class APIController extends Controller
             move_uploaded_file($_FILES['thumbnail']['tmp_name'],$imagePath);
 
             $inovasi = Inovasi::where('id_inovasi', '=', $id_inovasi)->first();
+
+            $kategorijmllama = Kategori::where('id_kategori', '=', $inovasi->kategori_id)->first();
+            $kategorijmllama->jumlah -=1;
+            $kategorijmllama->save();
+
             $inovasi->pengguna_id = $pengguna_id;
             $inovasi->judul = $judul;
             $inovasi->tagline = $tagline;
@@ -476,6 +511,10 @@ class APIController extends Controller
 
             if ($inovasi->save()) {
                 DB::commit();
+
+                $kategorijml = Kategori::where('id_kategori', '=', $kategori_id)->first();
+                $kategorijml->jumlah +=1;
+                $kategorijml->save();
 
                 $res['message'] = "Inovasi berhasil diupdate";
                 $res['value'] = "$inovasi";
@@ -517,7 +556,7 @@ class APIController extends Controller
             $find = Subscription::where('pengguna_id', '=', $id_pengguna)->where('inovasi_id', '=', $request->inovasi_id)->get();
 
             if(count($find) >= 1 ){
-                return abort(403, 'Unauthorized action.');
+                return abort(404, 'Inovasi tidak ditemukan');
             } else {
                 $subs = new Subscription;
                 $subs->pengguna_id = $id_pengguna;
@@ -531,6 +570,33 @@ class APIController extends Controller
             DB::rollback();
 
             return "Ada kesalahan saat mencob bergabung";
+        }
+    }
+
+    public function sendInvitation($id_pengguna, Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            
+            $find = Subscription::where('pengguna_id', '=', $id_pengguna)->where('inovasi_id', '=', $request->inovasi_id)->get();
+
+            if(count($find) >= 1 ){
+                return "Pengguna sudah bergabung";
+            } else {
+                $subs = new Subscription;
+                $subs->pengguna_id = $id_pengguna;
+                $subs->inovasi_id = $request->inovasi_id;
+                $subs->join_by = "invititation";
+                $subs->save();
+                DB::commit();
+                
+                return "Permintaan telah  terkirim";
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan saat mencoba mengundang teman";
         }
     }
     
@@ -563,6 +629,36 @@ class APIController extends Controller
         }
     }
     
+    public function acceptInvitation($id_inovasi, Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            $subs = Subscription::where('pengguna_id', '=', $request->pengguna_id)->where('inovasi_id', '=', $id_inovasi)->first();
+
+            if($subs->status == "anggota"){
+                return "Pengguna sudah manjadi anggota";
+            } else {
+                $inovasi = Inovasi::where('id_inovasi', '=', $id_inovasi)->first();
+                $inovasi->jml_anggota =  $inovasi->jml_anggota + 1;
+                $inovasi->save();
+
+                $subs->status = "anggota";
+                $subs->save();
+
+                
+                DB::commit();
+                
+                return "Pengguna berhasil bergabung";
+            }
+            
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan saat mengirim permintaan";
+        }
+    }
+    
     public function pendidikan()
     {
         $pendidikan = Pendidikan::all();
@@ -572,7 +668,10 @@ class APIController extends Controller
 
     public function allInovasi()
     {
-        $inovasi = Inovasi::join('kategori', 'kategori_id', '=', 'id_kategori')->get();
+        $inovasi = Inovasi::join('kategori', 'kategori_id', '=', 'id_kategori')
+                            ->join('pengguna', 'pengguna_id', '=', 'id_pengguna')
+                            ->select('pengguna.id_pengguna','pengguna.display_name','pengguna.profile_picture','inovasi.*','kategori.*')
+                            ->get();
 
         return $inovasi;
     }

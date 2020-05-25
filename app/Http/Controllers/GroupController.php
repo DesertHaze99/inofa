@@ -36,7 +36,8 @@ class GroupController extends Controller
     {
         $data  = Pengguna::join('inovasi', 'pengguna_id', '=', 'id_pengguna')
                         ->join('kategori', 'id_kategori', '=', 'kategori_id')
-                        ->select('pengguna.id_pengguna','pengguna.display_name','inovasi.*','kategori.*')
+                        ->join('wilayah', 'lokasi', '=', 'id_wilayah')
+                        ->select('pengguna.id_pengguna','pengguna.display_name','inovasi.*','kategori.*','wilayah.*')
                         ->get();
         //return $data;
         return datatables()->of($data)
@@ -64,6 +65,7 @@ class GroupController extends Controller
 
         $chats = Chats::join('pengguna', 'pengguna_id', '=', 'id_pengguna')
                 ->where('inovasi_id', '=', $id )
+                ->select('chats.*','pengguna.display_name', 'pengguna.profile_picture')
                 ->get();
 
                 
@@ -83,7 +85,8 @@ class GroupController extends Controller
             }
         }
 
-                    
+        
+
         return view('group.group', compact('inovasi', 'chats', 'temp', 'jumlahAnggota', 'anggota')); 
     }
 

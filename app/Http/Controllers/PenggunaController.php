@@ -11,6 +11,7 @@ use Datatables;
 use App\Pengguna;
 use App\Subscription;
 use App\Inovasi;
+use App\KemampuanMapping;
 
 class PenggunaController extends Controller
 {
@@ -51,7 +52,7 @@ class PenggunaController extends Controller
 
     public function show($id)
     {
-        $pengguna = Pengguna::where('id_pengguna', '=', $id)->first();
+        $pengguna = Pengguna::join('wilayah', 'lokasi', '=', 'id_wilayah')->where('id_pengguna', '=', $id)->first();
 
         $inovasi = Inovasi::where('pengguna_id', '=', $id)->get();
 
@@ -89,9 +90,14 @@ class PenggunaController extends Controller
                 ->where('mutual_maping.pengguna_id', '=', $id)
                 ->get();
 
+        $kemampuan = KemampuanMapping::join('kemampuan', 'kemampuan_id', '=', 'id_kemampuan')
+                                    ->where('pengguna_id', '=', $id)
+                                    ->get();
+
+
         $i=0;
                     
-        return view('akun.pengguna.index', compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif','bergabungAktif', 'bergabungInaktif', 'mutual')); 
+        return view('akun.pengguna.index', compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif','bergabungAktif', 'bergabungInaktif', 'mutual', 'kemampuan')); 
     }
 
 

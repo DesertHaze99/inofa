@@ -24,103 +24,83 @@
         <!-- Content area -->
         <div class="content">
             <!-- Inner container -->
-            <div class="d-md-flex align-items-md-start">
-
-                <!-- Left sidebar component -->
-                <div class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left wmin-300 border-0 shadow-0 sidebar-expand-md">
-
-                    <!-- Sidebar content -->
-                    <div class="sidebar-content">
-
-                        <!-- Navigation -->
-                        <div class="card " id="profilePict">
-                            <div class="card-body bg-indigo-400 text-center card-img-top" style="background-color : white; border-radius:10px;color:black;width:90%">
-                                <div class="card-img-actions d-inline-block mb-3">
-                                <img class="img-fluid rounded-circle" src="{{url('/')}}/{{$pengguna->profile_picture}}" width="100" height="100" alt="">
-                                    <div class="card-img-actions-overlay rounded-circle">
-                                        <a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
-                                            <i class="icon-plus3"></i>
-                                        </a>
-                                        <a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
-                                            <i class="icon-link"></i>
-                                        </a>
-                                    </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card d-flex justify-content-center" id="profilePict">
+                        <center>
+                        <div class="margin px-2 card-body bg-indigo-400 text-center card-img-top" style="background-color : white; border-radius:10px;color:black;width:90%">
+                            <div class="card-img-actions d-inline-block mb-3">
+                            <img class="img-fluid rounded-circle" src="{{$pengguna->profile_picture}}" width="100" height="100" alt="">
+                                <div class="card-img-actions-overlay rounded-circle">
+                                    <a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
+                                        <i class="icon-plus3"></i>
+                                    </a>
+                                    <a href="user_pages_profile.html" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round ml-2">
+                                        <i class="icon-link"></i>
+                                    </a>
+                                    <input type="hidden" name="longitude" id="longitude" value="{{$pengguna->longitude}}">
+                                    <input type="hidden" name="latitude" id="latitude" value="{{$pengguna->latitude}}">
+                                    <input id="namaUser"  type="hidden" name="namaUser" value="📍{{$pengguna->display_name}}">
                                 </div>
-
-                                <h6 class="font-weight-semibold mb-0">{{$pengguna->display_name}}</h6>
-                                <span class="d-block opacity-75">{{$pengguna->email}}</span>
-                                <br><br>
                             </div>
+
+                            <h6 class="font-weight-semibold mb-0 py-3">{{$pengguna->display_name}}</h6>
+                            <span class="mb-0 font-weight-semibold myBlue py-1">📍 {{$pengguna->propinsi}}</span>
+                            <span class="d-block opacity-75 py-1">{{$pengguna->email}}</span>
+                            <br><br>
                         </div>
-                        <!-- /navigation -->
-                        <br>
-                        <div class="card" >
-                            <div class="card-header header-elements-sm-inline">
-                                <h6 class="card-title">User's location</h6>
-                                <div class="header-elements">
-                                    <span><i class="icon-history mr-2 text-success"></i> Updated 3 hours ago</span>
-
-                                    <div class="list-icons ml-3">
-                                        <a class="list-icons-item" data-action="reload"></a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="card-body">
-                                <div class="chart-container">
-                                    <div class="chart has-fixed-height" >
-                                        <div id="map" style="height:400px;"></div>
-
-                                        <script type="text/javascript">
-                                        function initMap(){
-
-                                        var locations = [
-                                            ['Lokasi Pengguna', $pengguna->longitude, $pengguna->latitude, 5]
-                                        ];
-
-                                        var map = new google.maps.Map(document.getElementById('map'), {
-                                            zoom: 5,
-                                            center: new google.maps.LatLng(-0.8606915, 120.663729),
-                                            mapTypeId: google.maps.MapTypeId.ROADMAP
-                                        });
-
-                                        var infowindow = new google.maps.InfoWindow();
-
-                                        var marker, i;
-
-                                        for (i = 0; i < locations.length; i++) {  
-                                            marker = new google.maps.Marker({
-                                            position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-                                            map: map
-                                            });
-
-                                            google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                                            return function() {
-                                                infowindow.setContent(locations[i][0]);
-                                                infowindow.open(map, marker);
-                                            }
-                                            })(marker, i));
-                                        }
-                                        }
-                                        </script>
-                                        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUbRHtu3k_fg3jDGk_qAatE5jA4bC_ndE&callback=initMap" async defer></script>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
+                        </center>
                     </div>
-                    <!-- /sidebar content -->
+                    <div class="card myRounded" >
+                        <div class="chart-body ">
+                            <div class="chart " >
+                                <div class="myRounded" id="myMap" style="height:40vh"></div>
 
+                                <script type="text/javascript">
+                                var longitude = document.getElementById('longitude').value;
+                                var latitude = document.getElementById('latitude').value;
+                                var nama = document.getElementById('namaUser').value;
+                                
+                                function initMap(){
+
+                                var locations = [
+                                    [nama, longitude, latitude, 16]
+                                ];
+
+                                var map = new google.maps.Map(document.getElementById('myMap'), {
+                                    zoom: 13,
+                                    streetViewControl: false,
+								    mapTypeControl:false,
+                                    center: new google.maps.LatLng(longitude, latitude),
+                                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                                });
+
+                                var infowindow = new google.maps.InfoWindow();
+
+                                var marker, i;
+
+                                for (i = 0; i < locations.length; i++) {  
+                                    marker = new google.maps.Marker({
+                                    position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                                    map: map
+                                    });
+
+                                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                    return function() {
+                                        infowindow.setContent(locations[i][0]);
+                                        infowindow.open(map, marker);
+                                    }
+                                    })(marker, i));
+                                }
+                                }
+                                </script>
+                                <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUbRHtu3k_fg3jDGk_qAatE5jA4bC_ndE&callback=initMap" async defer></script>
+
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- /left sidebar component -->
-
-
-                <!-- Right content -->
-                <div class="tab-content w-100 overflow-auto">
-
+                <div class="col-md-9">
                     <div class="card">
                         <div class="card-header header-elements-inline">
                             
@@ -152,7 +132,7 @@
                                                     
                                                     <div class="form-group">
                                                         <label>Username:</label>
-                                                        <input type="text" class="form-control" value="{{$pengguna->display_name}}" name="display_name">
+                                                        <input  type="text" class=" form-control" value="{{$pengguna->display_name}}" name="display_name">
                                                     </div>
 
                                                     <div class="form-group">
@@ -215,14 +195,14 @@
                                                     </td>
                                                 </tr>
                                                 @foreach($inovasi as $dataInovasi)
-                                                    <tr>
+                                                    <tr >
                                                         <td class="pr-0" style="width: 45px;">
-                                                            <a href="{{ URL::to('/inovasi/'.$dataInovasi->id_inovasi.'' )}}">
-                                                                <img src="{{url('/')}}{{$dataInovasi->thumbnail}}" height="30" alt="">
+                                                            <a href="{{ URL::to('/group/'.$dataInovasi->id_inovasi.'')}}">
+                                                                <img src="{{url('/')}}/{{$dataInovasi->thumbnail}}" height="30" alt="">
                                                             </a>
                                                         </td>
                                                         <td>
-                                                            <a href="{{ URL::to('/inovasi/'.$dataInovasi->id_inovasi.'' )}} " style="color:black"> <b>{{$dataInovasi->judul}} </b></a>
+                                                            <a href="{{ URL::to('/group/'.$dataInovasi->id_inovasi.'' )}} " style="color:black"> <b>{{$dataInovasi->judul}} </b></a>
                                                         </td>
                                                         <td></td>
                                                         <td>
@@ -254,12 +234,12 @@
                                                     @foreach($subscription as $subScription)
                                                         <tr>
                                                             <td class="pr-0" style="width: 45px;">
-                                                                <a href="{{ URL::to('/inovasi/'.$subScription->id_inovasi.'' )}}">
-                                                                    <img src="{{url('/')}}{{$subScription->thumbnail}}" height="30" alt="">
+                                                                <a href="{{ URL::to('/group/'.$subScription->id_inovasi.'' )}}">
+                                                                    <img src="{{url('/')}}/{{$subScription->thumbnail}}" height="30" alt="">
                                                                 </a>
                                                             </td>
                                                             <td>
-                                                                <a href="{{ URL::to('/inovasi/'.$subScription->id_inovasi.'' )}}" style="color:black"> <b>{{$subScription->judul}}</b> </a>
+                                                                <a href="{{ URL::to('/group/'.$subScription->id_inovasi.'' )}}" style="color:black"> <b>{{$subScription->judul}}</b> </a>
                                                             </td>
                                                             <td></td>
                                                             <td>
@@ -289,16 +269,29 @@
                                 </div>
 
                                 <div id="kemampuan" class="tab-pane fade">
-                                  <h3>Menu 2</h3>
-                                  <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+                                    @foreach($kemampuan as $dataKemampuan)
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-1">
+                                                    <img class="img-fluid rounded-circle" src="{{url('/')}}/upload/kemampuan/placeholder.jpg" width="40" height="40" alt="" style="background-color: indigo;">
+                                                </div>
+                                                <div class="col-md-11">
+                                                    <h5 class="mb-0 font-weight-bold py-1">{{$dataKemampuan->kemampuan}}</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
                                 </div>
-                              </div>
+                            </div>
                             
                         </div>
                     </div>
-
                 </div>
-                <!-- /right content -->
+                
+
+
+                
 
             </div>
             <!-- /inner container -->

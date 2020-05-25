@@ -65,10 +65,10 @@
 					<thead>
 						<tr>
 							<th>Thumbnail</th>
-							<th>Judul</th>
-							<th>Dibuat</th>
-							<th>Pembuat</th>
-							<th>Kategori</th>
+							<th>Nama Group</th>
+							<th>Kota</th>
+							<th>Admin</th>
+							<th>Anggota</th>
 							<th>Manage</th>
 						</tr>
 					</thead>
@@ -80,6 +80,7 @@
 		</div>
 	</div>
 </div>
+
 
 
 @endsection
@@ -131,9 +132,11 @@
 						return '<img src="'+data+'" class="rounded-circle" width="40" height="40" alt="">'
 					}},
                     {data: 'judul', name: 'judul'},
-					{data: 'created_at', name: 'created_at'},
+					{data: 'propinsi', name: 'propinsi'},
 					{data: 'display_name',name:'display_name'},
-					{data: 'kategori',name:'kategori'},
+					{data: 'jml_anggota', 'targets' : [4], 'render': function(data){
+						return '<h6 class="mb-0 px-1">'+data+'</h6>'
+					}},
 					{data: 'action', name: 'action', "orderable": false, "searchable": false}
                 ],
                 "fixedColumns": true,
