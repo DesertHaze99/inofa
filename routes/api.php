@@ -41,6 +41,7 @@ Route::get('/subscription/{email}', 'APIController@subscription'); // list inova
 //API location
 Route::post('setLocation/{email}', 'APIController@setLocation'); // set user location
 Route::get('getLocation/{email}', 'APIController@getLocation'); // get user location
+Route::get('allWilayah', 'APIController@allWilayah'); // get semua propinsi
 
 //API chat
 Route::post('send/{id_pengguna}', 'APIController@sendChat'); // send Chat

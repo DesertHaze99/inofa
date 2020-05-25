@@ -192,7 +192,7 @@
 		}
 
 		#customSidebar{
-			height:90vh;
+			height:130vh;
 		}
 
 

@@ -193,9 +193,11 @@
                                       <h5 class="font-weight-bold margin">Media</h5>
                                         <div class="row">
                                         @foreach($chats as $chat)
-                                        <div class="col-sm">
+                                        @if($chat->media)
+                                        <div class="col-sm py-2">
                                             <img src="{{url('/')}}/{{$chat->media}}" style="max-height: 15vh;border-radius:5px" alt="">
                                         </div>
+                                        @endif
                                         @endforeach
                                         </div>
                                     </div>
