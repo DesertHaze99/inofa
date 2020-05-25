@@ -28,7 +28,12 @@ class IdeController extends Controller
      */
     public function index(Request $request)
     {
-        return view('ide.index');
+        $data  = Pengguna::join('inovasi', 'pengguna_id', '=', 'id_pengguna')
+                        ->join('kategori', 'id_kategori', '=', 'kategori_id')
+                        ->select('pengguna.id_pengguna','pengguna.display_name', 'pengguna.profile_picture', 'pengguna.lokasi','inovasi.*','kategori.*')
+                        ->get();
+
+        return view('ide.index', compact('data'));
     }
 
     //ajax datatable
@@ -36,10 +41,10 @@ class IdeController extends Controller
     {
         $data  = Pengguna::join('inovasi', 'pengguna_id', '=', 'id_pengguna')
                         ->join('kategori', 'id_kategori', '=', 'kategori_id')
-                        ->select('pengguna.id_pengguna','pengguna.display_name','inovasi.*','kategori.*')
+                        ->join('wilayah', 'id_wilayah', '=', 'lokasi')
+                        ->select('pengguna.id_pengguna','pengguna.display_name', 'pengguna.profile_picture', 'pengguna.lokasi','inovasi.*','kategori.*', 'wilayah.*')
                         ->get();
-        
-        //return $data;
+
         return datatables()->of($data)
             ->addColumn('action',function($data){
                 $button = '';

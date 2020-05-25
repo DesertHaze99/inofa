@@ -26,6 +26,7 @@ class Pengguna extends Model
         'short_desc',
         'longitude',
         'latitude',
+        'lokasi',
         'rating',
         'status'
     ];

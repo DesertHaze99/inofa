@@ -2,18 +2,23 @@
 
 @section('head')
 	<!-- Core JS files -->
-	<script src="{{ asset('limitless/Template/global_assets/global_assets/js/main/jquery.min.js')}}"></script>
-	<script src="{{ asset('limitless/Template/global_assets/global_assets/js/main/bootstrap.bundle.min.js')}}"></script>
-	<script src="{{ asset('limitless/Template/global_assets/global_assets/js/plugins/loaders/blockui.min.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/main/jquery.min.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/main/bootstrap.bundle.min.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/loaders/blockui.min.js')}}"></script>
 	<!-- /core JS files -->
 
 	<!-- Theme JS files -->
-	<script src="{{ asset('limitless/Template/global_assets/global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
-	<script src="{{ asset('limitless/Template/global_assets/global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/tables/datatables/datatables.min.js')}}"></script>
 
-	<script src="assets/js/app.js"></script>
-	<script src="{{ asset('limitless/Template/global_assets//global_assets/js/demo_pages/datatables_basic.js')}}"></script>
+	<script href="{{ asset('limitless/Template/layout_3/LTR/default/full/assets/js/app.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/demo_pages/datatables_basic.js')}}"></script>
+
+	<script src="{{ asset('limitless/Template//global_assets/js/demo_pages/components_modals.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/notifications/bootbox.min.js')}}"></script>
+	<script src="{{ asset('limitless/Template/global_assets/js/plugins/forms/selects/select2.min.js')}}"></script>
 	<!-- /theme JS files -->
+
+
 
 @endsection
 
@@ -66,8 +71,8 @@
 						<tr>
 							<th>Thumbnail</th>
 							<th>Judul</th>
-							<th>Dibuat</th>
-							<th>Pembuat</th>
+							<th>Kota</th>
+							<th>Admin</th>
 							<th>Kategori</th>
 							<th>Manage</th>
 						</tr>
@@ -80,6 +85,54 @@
 		</div>
 	</div>
 </div>
+
+<!-- Custom background color -->
+@foreach($data as $inovasi)
+<div id="modal{{$inovasi->id_inovasi}}" class="modal fade" tabindex="-1">
+	<div class="modal-dialog" style="border-radius: 10px">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="row">
+					<div class="col-md-1">
+						<img src="{{url('/')}}/{{$inovasi->profile_picture}}" class="rounded-circle" width="35" height="35"  alt="" >
+					</div>
+					<div class="col-md-9">
+						<h6 class="mb-0 font-weight-semibold">{{$inovasi->judul}}</h6>
+						<div class="row px-2">
+							<span class="mb-0 font-weight-medium text-primary">{{$inovasi->display_name}}</span> <span class="mb-0 font-weight-medium"> &nbsp | &nbsp </span> <span class="mb-0 font-weight-medium">{{explode(" ", $inovasi->created_at)[0]}}</span>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<span class="badge bg-primary ml-md-auto mr-md-3" style="border-radius:5px;">{{$inovasi->kategori}}</span>
+					</div>
+
+				</div>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			
+			<div class="modal-body">
+				<div class="card-body myRounded" style="background-image: url({{url('/')}}/{{$inovasi->thumbnail}}); background-size: cover;height:20vh"></div><br>
+				<h6 class="mb-0 font-weight-semibold py-2">
+					Tagline : {{$inovasi->tagline}}
+				</h6>
+
+				<span class="mb-0 font-weight-medium">
+					{{$inovasi->description}}
+				</span>
+			</div>
+
+			<div class="modal-footer">
+				<center>
+					<button type="button" class="btn btn-link text-white" data-dismiss="modal">Close</button>
+					<a href="{{URL::to('/group/'.$inovasi->id_inovasi)}}" type="button" class="btn bg-myBlue">Buka Group</a>
+				</center>
+				
+			</div>
+		</div>
+	</div>
+</div>
+@endforeach
+<!-- /custom background color -->
 
 
 @endsection
@@ -131,10 +184,14 @@
 						return '<img src="'+data+'" class="rounded-circle" width="40" height="40" alt="">'
 					}},
                     {data: 'judul', name: 'judul'},
-					{data: 'created_at', name: 'created_at'},
+					{data: 'propinsi', name: 'propinsi'},
 					{data: 'display_name',name:'display_name'},
-					{data: 'kategori',name:'kategori'},
-					{data: 'action', name: 'action', "orderable": false, "searchable": false}
+					{data: 'kategori', 'targets' : [4], 'render': function(data){
+						return '<span class="badge bg-primary ml-md-auto mr-md-3" style="border-radius:5px;">'+data+'</span>'
+					}},
+					{data: 'id_inovasi', 'targets' : [5], 'render': function(data){
+						return '<button type="button" class="btn alpha-slate" data-toggle="modal" data-target="#modal'+data+'" >Detail <i class="primary icon-eye ml-2"></i></button>'
+					}},
                 ],
                 "fixedColumns": true,
             });

@@ -16,6 +16,7 @@ class Subscription extends Model
         'pengguna_id',
         'inovasi_id',
         'status',
+        'join_by',
         'created_at',
         'updated-at'
     ];
