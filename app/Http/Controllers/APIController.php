@@ -338,6 +338,13 @@ class APIController extends Controller
         return $loc;
     }
 
+    public function allWilayah()
+    {
+        $wilayah = Wilayah::select('wilayah.propinsi','wilayah.id_wilayah', 'wilayah.longitude', 'wilayah.latitude')->get();
+
+        return $wilayah;
+    }
+
     public function sendChat( $id_pengguna, request $request)
     {
         $response = array();

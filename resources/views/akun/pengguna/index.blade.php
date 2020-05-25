@@ -30,7 +30,7 @@
                         <center>
                         <div class="margin px-2 card-body bg-indigo-400 text-center card-img-top" style="background-color : white; border-radius:10px;color:black;width:90%">
                             <div class="card-img-actions d-inline-block mb-3">
-                            <img class="img-fluid rounded-circle" src="{{$pengguna->profile_picture}}" width="100" height="100" alt="">
+                            <img class="img-fluid rounded-circle" style="object-fit: cover;" src="{{$pengguna->profile_picture}}" width="100" height="100" alt="">
                                 <div class="card-img-actions-overlay rounded-circle">
                                     <a href="#" class="btn btn-outline bg-white text-white border-white border-2 btn-icon rounded-round">
                                         <i class="icon-plus3"></i>
@@ -40,7 +40,7 @@
                                     </a>
                                     <input type="hidden" name="longitude" id="longitude" value="{{$pengguna->longitude}}">
                                     <input type="hidden" name="latitude" id="latitude" value="{{$pengguna->latitude}}">
-                                    <input id="namaUser"  type="hidden" name="namaUser" value="📍{{$pengguna->display_name}}">
+                                    <input id="namaUser"  type="hidden" name="namaUser" value="📍{{$pengguna->propinsi}}">
                                 </div>
                             </div>
 
@@ -60,7 +60,7 @@
                                 var longitude = document.getElementById('longitude').value;
                                 var latitude = document.getElementById('latitude').value;
                                 var nama = document.getElementById('namaUser').value;
-                                
+
                                 function initMap(){
 
                                 var locations = [

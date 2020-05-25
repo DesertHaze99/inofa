@@ -94,7 +94,7 @@
 			<div class="modal-header">
 				<div class="row">
 					<div class="col-md-1">
-						<img src="{{url('/')}}/{{$inovasi->profile_picture}}" class="rounded-circle" width="35" height="35"  alt="" >
+						<img src="{{$inovasi->profile_picture}}" class="rounded-circle" width="35" height="35"  alt="" >
 					</div>
 					<div class="col-md-9">
 						<h6 class="mb-0 font-weight-semibold">{{$inovasi->judul}}</h6>
