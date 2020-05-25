@@ -20,6 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // API for Google Account
 Route::post('signUp', 'APIController@signUp'); // API signUp
 Route::get('login/{email}', 'APIController@userLogedIn'); // API login
+Route::post('updateProfile/{email}', 'APIController@updateProfile'); // Update profile picture
 
 //API kategori
 Route::get('kategori', 'APIController@chategoryList');
