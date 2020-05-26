@@ -52,7 +52,9 @@ class PenggunaController extends Controller
 
     public function show($id)
     {
-        $pengguna = Pengguna::join('wilayah', 'lokasi', '=', 'id_wilayah')->where('id_pengguna', '=', $id)->first();
+        $pengguna = Pengguna::join('wilayah', 'lokasi', '=', 'id_wilayah')
+                            ->where('id_pengguna', '=', $id)
+                            ->select('pengguna.*','wilayah.propinsi')->first();
 
         $inovasi = Inovasi::where('pengguna_id', '=', $id)->get();
 

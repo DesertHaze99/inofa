@@ -50,7 +50,6 @@ Route::get('/allChat/{id_inovasi}', 'APIController@allChat'); // get all chat fr
 Route::post('/read/{id_chat}', 'APIController@read'); // a spesific user read a chat
 Route::get('/readby/{id_chat}', 'APIController@readby'); // get all users who read a specific chat
 
-
 //API inovasi
 Route::post('createInovasi', 'APIController@createInovasi'); // create new inovasi (group chat)
 Route::post('/deleteInovasi/{id_inovasi}', 'APIController@deleteInovasi'); // delete inovasi (group chat)
