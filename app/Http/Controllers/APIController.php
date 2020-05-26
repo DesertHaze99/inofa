@@ -53,7 +53,7 @@ class APIController extends Controller
                 $display_name = $newSignuUp->display_name;
                 $id = $newSignuUp->id;
                 $email = $newSignuUp->email;
-                $profile_picture = $request->profile_picture;
+                $profile_picture = $newSignuUp->profile_picture;
 
                 $newUser = new Pengguna;
                 $newUser->display_name = $display_name;
@@ -251,7 +251,11 @@ class APIController extends Controller
         $pengguna = Pengguna::where('email', '=', $email)->first();
 
         $inovasi = Subscription::join('inovasi', 'subscription.inovasi_id', '=', 'inovasi.id_inovasi')
+                                ->join('pengguna', 'subscription.pengguna_id', '=', 'pengguna.id_pengguna')
+                                ->join('kategori', 'kategori.id_kategori', '=', 'inovasi.kategori_id')
                                 ->where('subscription.pengguna_id','=',$pengguna->id_pengguna)
+                                ->where('subscription.status','=', 'anggota')
+                                ->select('subscription.*', 'inovasi.judul','inovasi.tagline','inovasi.description', 'inovasi.thumbnail', 'pengguna.display_name', 'pengguna.profile_picture', 'pengguna.email', 'pengguna.short_desc','kategori.kategori', 'kategori.kategori_thumbnail', 'kategori.warna')
                                 ->get();
 
         return $inovasi;
