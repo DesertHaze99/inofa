@@ -9,6 +9,7 @@ use Auth;
 use session;
 use Datatables;
 use App\Pengguna;
+use App\Pendidikan;
 use App\Subscription;
 use App\Inovasi;
 use App\KemampuanMapping;
@@ -62,6 +63,8 @@ class PenggunaController extends Controller
                         ->where('subscription.pengguna_id', '=', $id)
                         ->get();
 
+        $pendidikan = Pendidikan::all();
+
         $dibuatAktif = count(DB::table('inovasi')
                     ->where('pengguna_id', '=', $id)
                     ->where('inovasi.status', '=', 1)
@@ -99,7 +102,7 @@ class PenggunaController extends Controller
 
         $i=0;
                     
-        return view('akun.pengguna.index', compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif','bergabungAktif', 'bergabungInaktif', 'mutual', 'kemampuan')); 
+        return view('akun.pengguna.index', compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif','bergabungAktif', 'bergabungInaktif', 'mutual', 'kemampuan', 'pendidikan')); 
     }
 
 
@@ -131,12 +134,12 @@ class PenggunaController extends Controller
             $pengguna->save();
             DB::commit();
 
-            return redirect()->route('pengguna.show', $id)->with('success','Data pengguna berhasil di update');
+            return redirect()->route('akun.show', $id)->with('success','Data pengguna berhasil di update');
             
         } catch (Exception $e) {
             DB::rollback();
 
-            return redirect()->route('pengguna.show', $id)->with('error','Ada yang tidak beres silahkan hubungi pengembang');
+            return redirect()->route('akun.show', $id)->with('error','Ada yang tidak beres silahkan hubungi pengembang');
         }
     }
 
