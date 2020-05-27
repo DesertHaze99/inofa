@@ -14,6 +14,7 @@ use App\Inovasi;
 use App\Kategori;
 use App\Kemampuan;
 use App\KemampuanMapping;
+use App\InovasiKemampuanMapping;
 use App\Chats;
 use App\ChatMapping;
 use App\Pendidikan;
@@ -241,7 +242,11 @@ class APIController extends Controller
     {
         $pengguna = Pengguna::where('email', '=', $email)->first();
 
-        $inovasi = Inovasi::where('pengguna_id','=',$pengguna->id_pengguna)->get();
+        $inovasi = Inovasi::join('pengguna', 'inovasi.pengguna_id', '=', 'pengguna.id_pengguna')
+                            ->join('kategori', 'kategori.id_kategori', '=', 'inovasi.kategori_id')
+                            ->where('inovasi.pengguna_id','=',$pengguna->id_pengguna)
+                            ->select('inovasi.*', 'pengguna.display_name', 'pengguna.profile_picture', 'pengguna.email', 'pengguna.short_desc','kategori.kategori', 'kategori.kategori_thumbnail', 'kategori.warna')
+                            ->get();
 
         return $inovasi;
     }
@@ -639,7 +644,7 @@ class APIController extends Controller
                 $subs = new Subscription;
                 $subs->pengguna_id = $id_pengguna;
                 $subs->inovasi_id = $request->inovasi_id;
-                $subs->join_by = "invititation";
+                $subs->join_by = "invitation";
                 $subs->save();
                 DB::commit();
                 
@@ -711,6 +716,49 @@ class APIController extends Controller
         }
     }
     
+    public function addKemampuanInovasi($id_inovasi, Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            $kemampuan = new InovasiKemampuanMapping;
+            $kemampuan->kemampuan_id = $request->kemampuan_id;
+            $kemampuan->inovasi_id = $id_inovasi;
+            $kemampuan->save();
+            DB::commit();
+
+            return "Data kemampuan berhasil ditambahkan";
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan saat menambah data kemampuan";
+        }
+    }
+    
+    public function inovasiByKemampuan($id_kemampuan, Request $request)
+    {
+
+        DB::beginTransaction();
+        try {
+            $kemampuan = Kemampuan::where('id_kemampuan', '=', $id_kemampuan)->first();
+
+            $list = InovasiKemampuanMapping::join('kemampuan', 'kemampuan.id_kemampuan', '=', 'inovasi_kemampuan_mapping.kemampuan_id')
+                                            ->join('inovasi', 'inovasi.id_inovasi', '=', 'inovasi_kemampuan_mapping.inovasi_id')
+                                            ->join('kategori', 'inovasi.kategori_id', '=', 'kategori.id_kategori')
+                                            ->join('pengguna', 'inovasi.pengguna_id', '=', 'pengguna.id_pengguna')
+                                            ->join('wilayah', 'pengguna.lokasi', '=', 'wilayah.id_wilayah')
+                                            ->where('inovasi_kemampuan_mapping.kemampuan_id', '=', $id_kemampuan)
+                                            ->select('kemampuan.kemampuan', 'kategori.kategori',  'inovasi.judul', 'inovasi.tagline', 'inovasi.description', 'inovasi.thumbnail', 'inovasi.jml_anggota', 'inovasi.status', 'inovasi.created_at', 'pengguna.display_name', 'pengguna.profile_picture', 'pengguna.pendidikan', 'pengguna.email', 'short_desc', 'wilayah.propinsi', 'pengguna.longitude', 'pengguna.latitude')
+                                            ->get();
+
+            return $list;
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return "Ada kesalahan pemrosesan data";
+        }
+    }
+    
     public function pendidikan()
     {
         $pendidikan = Pendidikan::all();
@@ -720,6 +768,18 @@ class APIController extends Controller
 
     public function allInovasi()
     {
+        $inovasi = Inovasi::join('kategori', 'kategori_id', '=', 'id_kategori')
+                            ->join('pengguna', 'pengguna_id', '=', 'id_pengguna')
+                            ->select('pengguna.id_pengguna','pengguna.display_name','pengguna.profile_picture','inovasi.*','kategori.*')
+                            ->get();
+
+        return $inovasi;
+    }
+    
+    public function inovasiBySkill()
+    {
+        $
+
         $inovasi = Inovasi::join('kategori', 'kategori_id', '=', 'id_kategori')
                             ->join('pengguna', 'pengguna_id', '=', 'id_pengguna')
                             ->select('pengguna.id_pengguna','pengguna.display_name','pengguna.profile_picture','inovasi.*','kategori.*')
@@ -741,7 +801,24 @@ class APIController extends Controller
     {
         $inovasi = Inovasi::find($id_inovasi)->first();
 
-        $member = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')->where('inovasi_id', $id_inovasi)->where('subscription.status','=', 'pending')->get();
+        $member = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')
+                ->where('inovasi_id', $id_inovasi)
+                ->where('subscription.status','=', 'pending')
+                ->where('subscription.join_by','=', 'join')
+                ->get();
+
+        return $member;
+    }
+    
+    public function inviteMember($id_inovasi, Request $request)
+    {
+        $inovasi = Inovasi::find($id_inovasi)->first();
+
+        $member = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')
+                ->where('inovasi_id', $id_inovasi)
+                ->where('subscription.status','=', 'pending')
+                ->where('subscription.join_by','=', 'invitation')
+                ->get();
 
         return $member;
     }

@@ -154,7 +154,12 @@
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label>Pendidikan:</label>
-                                                                <input type="text" value="{{$pengguna->pendidikan}}" name="pendidikan" class="form-control">
+                                                                <select class="form-control" id="pendidikan" name="pendidikan">
+                                                                    @foreach($pendidikan as $dataPendidikan)
+                                                                        <option name="pendidikan" value="{{$dataPendidikan->id_pendidikan}}" @if($pengguna->pendidikan == $dataPendidikan->id_pendidikan) selected @endif >{{$dataPendidikan->pendidikan}}</option>
+                                                                    @endforeach
+                                                                    
+                                                                  </select>
                                                             </div>
                                                         </div>
                                                     </div>
