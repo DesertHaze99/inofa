@@ -776,18 +776,6 @@ class APIController extends Controller
         return $inovasi;
     }
     
-    public function inovasiBySkill()
-    {
-        $
-
-        $inovasi = Inovasi::join('kategori', 'kategori_id', '=', 'id_kategori')
-                            ->join('pengguna', 'pengguna_id', '=', 'id_pengguna')
-                            ->select('pengguna.id_pengguna','pengguna.display_name','pengguna.profile_picture','inovasi.*','kategori.*')
-                            ->get();
-
-        return $inovasi;
-    }
-    
     public function allMember($id_inovasi, Request $request)
     {
         $inovasi = Inovasi::find($id_inovasi)->first();
@@ -802,9 +790,12 @@ class APIController extends Controller
         $inovasi = Inovasi::find($id_inovasi)->first();
 
         $member = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')
+                ->join('pendidikan', 'pengguna.pendidikan', '=', 'pendidikan.id_pendidikan')
+                ->join('wilayah', 'pengguna.lokasi', '=', 'wilayah.id_wilayah')
                 ->where('inovasi_id', $id_inovasi)
                 ->where('subscription.status','=', 'pending')
                 ->where('subscription.join_by','=', 'join')
+                ->select('subscription.*',  'pengguna.display_name', 'pengguna.profile_picture', 'pendidikan.pendidikan','pengguna.email', 'pengguna.short_desc', 'pengguna.longitude', 'pengguna.latitude', 'wilayah.propinsi')
                 ->get();
 
         return $member;
@@ -821,6 +812,20 @@ class APIController extends Controller
                 ->get();
 
         return $member;
+    }
+    
+    public function invitedToInovasi($id_pengguna, Request $request)
+    {
+
+        $inovasi = Subscription::join('inovasi', 'inovasi_id', '=', 'id_inovasi')
+                ->join('kategori', 'inovasi.kategori_id', '=', 'kategori.id_kategori')
+                ->where('subscription.pengguna_id', $id_pengguna)
+                ->where('subscription.status','=', 'pending')
+                ->where('subscription.join_by','=', 'invitation')
+                ->select('subscription.*', 'kategori.*', 'inovasi.judul', 'inovasi.tagline', 'inovasi.description', 'inovasi.thumbnail')
+                ->get();
+
+        return $inovasi;
     }
     
     
