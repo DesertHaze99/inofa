@@ -54,16 +54,16 @@ Route::post('createInovasi', 'APIController@createInovasi'); // create new inova
 Route::post('/deleteInovasi/{id_inovasi}', 'APIController@deleteInovasi'); // delete inovasi (group chat)
 Route::post('/updateInovasi/{id_inovasi}', 'APIController@updateInovasi'); // update specific inovasi ( group chat)
 Route::get('inovasi', 'APIController@allInovasi'); // get all inovasi
-Route::get('inovasiBySkill', 'APIController@inovasiBySkill'); // get all inovasi by skill *
 Route::get('member/{id_inovasi}', 'APIController@allMember'); // get semua user yang menjadi anggota grup sebuah inovasi
 Route::get('requestMember/{id_inovasi}', 'APIController@requestMember'); // get semua user yang mengirim permintaan bergabung anggota grup sebuah inovasi
-Route::get('inviteMember/{id_inovasi}', 'APIController@inviteMember'); // get semua user yang diinvite ke sebuah inovasi(group chat) *
+Route::get('inviteMember/{id_inovasi}', 'APIController@inviteMember'); // get semua user yang diinvite ke sebuah inovasi(group chat)
+Route::get('/invited/{id_pengguna}', 'APIController@invitedToInovasi'); // get inovasi dimana user diinvite *
 Route::post('/join/{id_pengguna}', 'APIController@requestJoin'); // request to join an inovasi(group chat)
 Route::post('/grantJoin/{id_pengguna}', 'APIController@grantJoin'); // grant join request an inovasi(group chat)
 Route::post('/invite/{id_pengguna}', 'APIController@sendInvitation'); // mengirim invitation/undangan untuk bergabung ke inovasi(group chat)
 Route::post('/accept/{id_inovasi}', 'APIController@acceptInvitation'); // menerima invitation menjadi member
-Route::post('/addKemampuan/{id_inovasi}', 'APIController@addKemampuanInovasi'); // menambahkan kemampuan terhadap inovasi *
-Route::get('/inovasiByKemampuan/{id_inovasi}', 'APIController@inovasiByKemampuan'); // list inovasi berdasarkan kemampuan *
+Route::post('/addKemampuan/{id_inovasi}', 'APIController@addKemampuanInovasi'); // menambahkan kemampuan terhadap inovasi
+Route::get('/inovasiByKemampuan/{id_inovasi}', 'APIController@inovasiByKemampuan'); // list inovasi berdasarkan kemampuan
 
 //API pendidikan
 Route::get('pendidikan', 'APIController@pendidikan'); // get list pendidikan
