@@ -35,55 +35,6 @@ class APIController extends Controller
         return Pengguna::join('pendidikan','pendidikan.id_pendidikan', '=', 'pengguna.pendidikan')->get();
     }
     
-    public function signUp( request $newSignuUp  )
-    {
-        $this->validate($newSignuUp,[
-            'display_name' => 'required',
-            'id' => 'required',
-            'email' => 'required'
-        ]);
-
-        DB::beginTransaction();
-        try {
-            $dataPengguna = Pengguna::where('email', '=', $newSignuUp->email)->get();
-            if(count($dataPengguna) > 1){
-                
-                return "User sudah terdaftar";
-            } else {
-                $response = array();
-                $display_name = $newSignuUp->display_name;
-                $id = $newSignuUp->id;
-                $email = $newSignuUp->email;
-                $profile_picture = $newSignuUp->profile_picture;
-
-                $newUser = new Pengguna;
-                $newUser->display_name = $display_name;
-                $newUser->profile_picture = $profile_picture;
-                $newUser->id = $id;
-                $newUser->email = $email;
-                
-                if ($newUser->save()) {
-                    DB::commit();
-                    $res['message'] = "Pengguna berhasil didaftarkan";
-                    $res['value'] = "$newUser";
-                    return response($res);
-                }
-                else{
-                    $res['message'] = "Data yang dimasukkan tidak sesuai permintaan";
-                    return response($res);
-                }
-                
-            }
-
-           
-        } catch (Exception $e) {
-            DB::rollback();
-
-            return "Ada kesalahan saat sign up";
-        }
-
-    }
-    
     public function updateProfile($email, request $request  )
     {
 
@@ -123,17 +74,6 @@ class APIController extends Controller
             return "Ada kesalahan saat mengganti profile";
         }
 
-    }
-    
-    public function userLogedIn($email)
-    {
-        $user = Pengguna::join('pendidikan', 'pengguna.pendidikan', '=', 'pendidikan.id_pendidikan')->where('email', $email)->first();
-        if(!empty($user)){
-            return $user;
-        } else {
-            return "User belum terdaftar";
-        }
-        
     }
     
     public function chategoryList()
