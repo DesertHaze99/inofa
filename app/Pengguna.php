@@ -2,10 +2,15 @@
 
 namespace App;
 
+use Laravel\Passport\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Pengguna extends Model
+class Pengguna extends Authenticatable
 {
+    use HasApiTokens, Notifiable;
+
     protected $table = 'pengguna';
 
     protected $primaryKey = 'id_pengguna';
@@ -27,8 +32,13 @@ class Pengguna extends Model
         'longitude',
         'latitude',
         'lokasi',
+        'token',
         'rating',
         'status'
+    ];
+    
+    protected $hidden = [
+         'remember_token'
     ];
 
     public function pendidikan()

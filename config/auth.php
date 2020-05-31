@@ -34,7 +34,18 @@ return [
     | Supported: "session", "token"
     |
     */
-
+    'guards' => [
+        'web' => [
+           'driver' => 'session',
+           'provider' => 'users',
+        ],
+     
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'pengguna',
+        ],
+    ],
+/* 
     'guards' => [
         'web' => [
             'driver' => 'session',
@@ -46,7 +57,7 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
-    ],
+    ], */
 
     /*
     |--------------------------------------------------------------------------
@@ -69,6 +80,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'pengguna' => [
+            'driver' => 'eloquent',
+            'model' => App\Pengguna::class,
         ],
 
         // 'users' => [
@@ -99,6 +115,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
+
+        
     ],
 
     /*
