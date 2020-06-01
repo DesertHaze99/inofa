@@ -28,7 +28,10 @@ class PenggunaController extends Controller
     public $successStatus = 200;
 
     public function login($email){
-        $user = Pengguna::where('email', $email)->first();
+        $user = Pengguna::where('email', $email)
+                ->join('pendidikan', 'pendidikan.id_pendidikan', '=', 'pengguna.pendidikan')
+                ->join('wilayah', 'id_wilayah', '=', 'lokasi')
+                ->select('pengguna.*', 'pendidikan.*', 'wilayah.propinsi')->first();
 
         if(!empty($user)){
             $successLogin['token'] =  $user->createToken('nApp')->accessToken;
@@ -58,7 +61,9 @@ class PenggunaController extends Controller
         
             $dataPengguna = Pengguna::where('email', '=', $newSignuUp->email)->get();
             if(count($dataPengguna) >= 1){
-                return "User sudah terdaftar";
+
+               $res['message'] = "User sudah terdaftar";
+                return response($res);
             } else {
                 $response = array();
                 $display_name = $newSignuUp->display_name;
@@ -82,7 +87,7 @@ class PenggunaController extends Controller
                     $newUser->token =  $success['token'];
                     $newUser->save();
 
-                    return response()->json(['success'=>$success, 'res'=> $res], $this->successStatus);
+                    return response($res, $this->successStatus);
                 }
                 else{
                     $res['message'] = "Data yang dimasukkan tidak sesuai permintaan";
@@ -90,10 +95,6 @@ class PenggunaController extends Controller
                 }
                 
             }
-
-           
-        
-        
     }
 
     public function details()

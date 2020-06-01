@@ -60,7 +60,7 @@ Route::group(['middleware' => ['auth:api']], function(){
     Route::get('member/{id_inovasi}', 'APIController@allMember'); // get semua user yang menjadi anggota grup sebuah inovasi
     Route::get('requestMember/{id_inovasi}', 'APIController@requestMember'); // get semua user yang mengirim permintaan bergabung anggota grup sebuah inovasi
     Route::get('inviteMember/{id_inovasi}', 'APIController@inviteMember'); // get semua user yang diinvite ke sebuah inovasi(group chat)
-    Route::get('/invited/{id_pengguna}', 'APIController@invitedToInovasi'); // get inovasi dimana user diinvite *
+    Route::get('/invited/{id_pengguna}', 'APIController@invitedToInovasi'); // get inovasi dimana user diinvite
     Route::post('/join/{id_pengguna}', 'APIController@requestJoin'); // request to join an inovasi(group chat)
     Route::post('/grantJoin/{id_pengguna}', 'APIController@grantJoin'); // grant join request an inovasi(group chat)
     Route::post('/invite/{id_pengguna}', 'APIController@sendInvitation'); // mengirim invitation/undangan untuk bergabung ke inovasi(group chat)
