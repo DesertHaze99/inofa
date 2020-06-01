@@ -31,8 +31,8 @@ class DashboardController extends Controller
         $timestamp=$timestamp." 00:00:00";
 
 
-        $pengguna = Pengguna::all();
-        $jmlPengguna = count($pengguna)-1;
+        $pengguna = Pengguna::where('id_pengguna','!=', -1)->get();
+        $jmlPengguna = count($pengguna);
         $jmlPenggunaNew = count(Pengguna::where('created_at', '>', $timestamp)->get());
 
         $group = Inovasi::all();

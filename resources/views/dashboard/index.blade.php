@@ -129,27 +129,27 @@
 						<!-- #1 -->
 						<input type="hidden" name="pertamaLongitude" id="pertamaLongitude" value="{{$wilayah[0]->longitude}}">
 						<input type="hidden" name="pertamaLatitude" id="pertamaLatitude" value="{{$wilayah[0]->latitude}}">
-						<input type="hidden" name="pertamaPropinsi" id="pertamaPropinsi" value="📍 1.{{$wilayah[0]->propinsi}}">
+						<input type="hidden" name="pertamaPropinsi" id="pertamaPropinsi" value="📍 1. {{$wilayah[0]->propinsi}}">
 						<!-- /#1 -->
 						<!-- #2 -->
 						<input type="hidden" name="keduaLongitude" id="keduaLongitude" value="{{$wilayah[1]->longitude}}">
 						<input type="hidden" name="keduaLatitude" id="keduaLatitude" value="{{$wilayah[1]->latitude}}">
-						<input type="hidden" name="keduaPropinsi" id="keduaPropinsi" value="📍 2.{{$wilayah[1]->propinsi}}">
+						<input type="hidden" name="keduaPropinsi" id="keduaPropinsi" value="📍 2. {{$wilayah[1]->propinsi}}">
 						<!-- /#2 -->
 						<!-- #3 -->
 						<input type="hidden" name="ketigaLongitude" id="ketigaLongitude" value="{{$wilayah[2]->longitude}}">
 						<input type="hidden" name="ketigaLatitude" id="ketigaLatitude" value="{{$wilayah[2]->latitude}}">
-						<input type="hidden" name="ketigaPropinsi" id="ketigaPropinsi" value="📍 3.{{$wilayah[2]->propinsi}}">
+						<input type="hidden" name="ketigaPropinsi" id="ketigaPropinsi" value="📍 3. {{$wilayah[2]->propinsi}}">
 						<!-- /#3 -->
 						<!-- #4 -->
 						<input type="hidden" name="keempatLongitude" id="keempatLongitude" value="{{$wilayah[3]->longitude}}">
 						<input type="hidden" name="keempatLatitude" id="keempatLatitude" value="{{$wilayah[3]->latitude}}">
-						<input type="hidden" name="keempatPropinsi" id="keempatPropinsi" value="📍 4.{{$wilayah[3]->propinsi}}">
+						<input type="hidden" name="keempatPropinsi" id="keempatPropinsi" value="📍 4. {{$wilayah[3]->propinsi}}">
 						<!-- /#4 -->
 						<!-- #5 -->
 						<input type="hidden" name="kelimaLongitude" id="kelimaLongitude" value="{{$wilayah[4]->longitude}}">
 						<input type="hidden" name="kelimaLatitude" id="kelimaLatitude" value="{{$wilayah[4]->latitude}}">
-						<input type="hidden" name="kelimaPropinsi" id="kelimaPropinsi" value="📍 5.{{$wilayah[4]->propinsi}}">
+						<input type="hidden" name="kelimaPropinsi" id="kelimaPropinsi" value="📍 5. {{$wilayah[4]->propinsi}}">
 						<!-- /#5 -->
 
 					<div class="chart " >
@@ -228,12 +228,12 @@
 								<h6 class="font-weight-bold margin">{{$dataWilayah->propinsi}}</h6>
 							</div>
 							<div class="col-md-3 float-right text-right">
-								<h6 class=" font-weight-bold text-right margin ">{{$dataWilayah->jumlah}}</h6>
+								<h6 class=" font-weight-bold text-right margin ">{{$dataWilayah->jumlah}} <small class="text-muted">pengguna</small></h6>
 							</div>
 						</div>
 
 						<div class="progress mb-3" style="height: 0.7rem;">
-							<div class="progress-bar rounded-round {{$warna[$i]}}" style="width: {{100*$dataWilayah->jumlah/$jmlGroup}}%"></div>
+							<div class="progress-bar rounded-round {{$warna[$i]}}" style="width: {{(100*$dataWilayah->jumlah)/$jmlPengguna}}%"></div>
 						</div>
 
 						<?php $i=$i+1 ?>
