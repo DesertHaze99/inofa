@@ -53,7 +53,7 @@ class APIController extends Controller
                 
                 if ($user->save()) {
                     DB::commit();
-                    $res['message'] = "Foto profil berhasil ditambahkan";
+                    $res['message'] = "Foto profil berhasil diperbarui";
                     $res['value'] = "$user";
                     return response($res);
                 }
@@ -71,7 +71,7 @@ class APIController extends Controller
         } catch (Exception $e) {
             DB::rollback();
 
-            return "Ada kesalahan saat mengganti profile";
+            return "Ada kesalahan saat mencoba memberbarui foto profil";
         }
 
     }
@@ -185,7 +185,8 @@ class APIController extends Controller
         $inovasi = Inovasi::join('pengguna', 'inovasi.pengguna_id', '=', 'pengguna.id_pengguna')
                             ->join('kategori', 'kategori.id_kategori', '=', 'inovasi.kategori_id')
                             ->where('inovasi.pengguna_id','=',$pengguna->id_pengguna)
-                            ->select('inovasi.*', 'pengguna.display_name', 'pengguna.profile_picture', 'pengguna.email', 'pengguna.short_desc','kategori.kategori', 'kategori.kategori_thumbnail', 'kategori.warna')
+                            ->select('inovasi.*', 'pengguna.display_name', 'pengguna.profile_picture', 
+                            'pengguna.email', 'pengguna.short_desc','kategori.kategori', 'kategori.kategori_thumbnail', 'kategori.warna')
                             ->get();
 
         return $inovasi;
@@ -200,7 +201,10 @@ class APIController extends Controller
                                 ->join('kategori', 'kategori.id_kategori', '=', 'inovasi.kategori_id')
                                 ->where('subscription.pengguna_id','=',$pengguna->id_pengguna)
                                 ->where('subscription.status','=', 'anggota')
-                                ->select('subscription.*', 'inovasi.judul','inovasi.tagline','inovasi.description', 'inovasi.thumbnail', 'pengguna.display_name', 'pengguna.profile_picture', 'pengguna.email', 'pengguna.short_desc','kategori.kategori', 'kategori.kategori_thumbnail', 'kategori.warna')
+                                ->select('subscription.*', 'inovasi.judul','inovasi.tagline',
+                                'inovasi.description', 'inovasi.thumbnail', 'pengguna.display_name', 
+                                'pengguna.profile_picture', 'pengguna.email', 'pengguna.short_desc',
+                                'kategori.kategori', 'kategori.kategori_thumbnail', 'kategori.warna')
                                 ->get();
 
         return $inovasi;
@@ -418,7 +422,9 @@ class APIController extends Controller
         DB::beginTransaction();
         try {
 
-            $dataInovasi = Inovasi::where('judul', '=', $request->judul)->where('pengguna_id', '=', $request->pengguna_id)->get();
+            $dataInovasi = Inovasi::where('judul', '=', $request->judul)
+                                    ->where('pengguna_id', '=', $request->pengguna_id)
+                                    ->get();
             if(count($dataInovasi) > 1){
                 
                 return "Inovasi sudah ada";
@@ -566,7 +572,7 @@ class APIController extends Controller
         } catch (Exception $e) {
             DB::rollback();
 
-            return "Ada kesalahan saat mencob bergabung";
+            return "Ada kesalahan saat mencoba bergabung";
         }
     }
 
@@ -688,10 +694,14 @@ class APIController extends Controller
                                             ->join('pengguna', 'inovasi.pengguna_id', '=', 'pengguna.id_pengguna')
                                             ->join('wilayah', 'pengguna.lokasi', '=', 'wilayah.id_wilayah')
                                             ->where('inovasi_kemampuan_mapping.kemampuan_id', '=', $id_kemampuan)
-                                            ->select('kemampuan.kemampuan', 'kategori.kategori',  'inovasi.judul', 'inovasi.tagline', 'inovasi.description', 'inovasi.thumbnail', 'inovasi.jml_anggota', 'inovasi.status', 'inovasi.created_at', 'pengguna.display_name', 'pengguna.profile_picture', 'pengguna.pendidikan', 'pengguna.email', 'short_desc', 'wilayah.propinsi', 'pengguna.longitude', 'pengguna.latitude')
+                                            ->select('kemampuan.kemampuan', 'kategori.kategori',  'inovasi.judul', 'inovasi.tagline', 
+                                            'inovasi.description', 'inovasi.thumbnail', 'inovasi.jml_anggota', 'inovasi.status', 
+                                            'inovasi.created_at', 'pengguna.display_name', 'pengguna.profile_picture', 'pengguna.pendidikan', 
+                                            'pengguna.email', 'short_desc', 'wilayah.propinsi', 'pengguna.longitude', 'pengguna.latitude')
                                             ->get();
 
             return $list;
+            DB::commit();
         } catch (Exception $e) {
             DB::rollback();
 
@@ -735,7 +745,9 @@ class APIController extends Controller
                 ->where('inovasi_id', $id_inovasi)
                 ->where('subscription.status','=', 'pending')
                 ->where('subscription.join_by','=', 'join')
-                ->select('subscription.*',  'pengguna.display_name', 'pengguna.profile_picture', 'pendidikan.pendidikan','pengguna.email', 'pengguna.short_desc', 'pengguna.longitude', 'pengguna.latitude', 'wilayah.propinsi')
+                ->select('subscription.*',  'pengguna.display_name', 'pengguna.profile_picture', 
+                'pendidikan.pendidikan','pengguna.email', 'pengguna.short_desc', 'pengguna.longitude', 
+                'pengguna.latitude', 'wilayah.propinsi')
                 ->get();
 
         return $member;

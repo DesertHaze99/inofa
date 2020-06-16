@@ -749,7 +749,7 @@ body {
   .sidebar-expand-sm:not(.sidebar-component) {
     border: 0; } }
 
-@media (min-width: 768px) {
+@media (min-width: 868px) {
   .sidebar-expand-md.sidebar-main {
     z-index: 99;
     box-shadow: none; }
@@ -770,11 +770,11 @@ body {
   .sidebar-expand-md:not(.sidebar-component) {
     position: static;
     transition: none; } }
-  @media (min-width: 768px) and (prefers-reduced-motion: reduce) {
+  @media (min-width: 868px) and (prefers-reduced-motion: reduce) {
     .sidebar-expand-md:not(.sidebar-component) {
       transition: none; } }
 
-@media (min-width: 768px) {
+@media (min-width: 868px) {
     .sidebar-expand-md:not(.sidebar-component):not(.sidebar-fixed) .sidebar-content {
       position: static;
       overflow: visible;
@@ -802,7 +802,7 @@ body {
     .sidebar-expand-md.sidebar-component-right {
       margin-left: 1.25rem; } }
 
-@media (max-width: 767.98px) {
+@media (max-width: 867.98px) {
   .sidebar-expand-md:not(.sidebar-component) {
     border: 0; } }
 

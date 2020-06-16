@@ -20,4 +20,15 @@ class InovasiKemampuanMapping extends Model
         'updated_at'
     ];
 
+    public function inovasi()
+    {
+        return $this->hasOne('App\Inovasi', 'inovasi_id', 'id_inovasi');
+    }
+
+    public function kemampuan()
+    {
+        return $this->hasMany('App\Kemampuan', 'kemampuan_id', 'id_kemampuan');
+    }
+
 }
+

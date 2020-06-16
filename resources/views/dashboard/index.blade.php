@@ -62,11 +62,10 @@
 
 <!-- Dashboard content -->
 <div class="row margin">
-
 	<div class="col-xl-12">
 		<!-- Top Banner -->
 		<div class="row">
-			<a class="col-sm-3 black" href="{{URL::to('/akun')}}">
+			<a class="col-lg-3 col-md-6 col-sm-6 black" href="{{URL::to('/akun')}}">
 				<div id="hover" class="card text-left myRounded" >
 					<div  class="card-body hover">
 						<div   class="mb-0">
@@ -79,7 +78,7 @@
 				</div>
 			</a>
 
-			<a class="col-sm-3 black" href="{{URL::to('/group')}}">
+			<a class="col-lg-3 col-md-6 col-sm-6 black" href="{{URL::to('/group')}}">
 				<div id="hover" class="card text-left myRounded" >
 					<div class="card-body hover">
 						<div  class="mb-0">
@@ -92,7 +91,7 @@
 				</div>
 			</a>
 
-			<a class="col-sm-3 black" href="{{URL::to('/group')}}">
+			<a class="col-lg-3 col-md-6 col-sm-6 black" href="{{URL::to('/group')}}">
 				<div id="hover" class="card text-left myRounded " >
 					<div class="card-body hover">
 						<div  class="mb-0">
@@ -105,7 +104,7 @@
 				</div>
 			</a>
 
-			<a class="col-sm-3 black" href="{{URL::to('/group')}}">
+			<a class="col-lg-3 col-md-6 col-sm-6 black" href="{{URL::to('/group')}}">
 				<div id="hover" class="card text-left myRounded" >
 					<div class="card-body hover">
 						<div  class="mb-0">
@@ -123,7 +122,7 @@
 
 		<!-- Top Banner -->
 		<div class="row bg-white myRounded padding margin  align-content-start ">
-			<div class="col-sm-6">
+			<div class="col-lg-6 col-md-12">
 				<div class="chart-body">
 					<h4 class="font-weight-bold margin">Lokasi Teratas</h4>
 						<!-- #1 -->
@@ -219,7 +218,7 @@
 				</div>
 			</div>
 
-			<div class="col-sm-6">
+			<div class="col-lg-6 col-md-12">
 				<div class="card-body">
 					<?php $i=0 ?>
 					@foreach($wilayah as $dataWilayah)
@@ -248,14 +247,15 @@
 
 		<br>
 		<div class="row">
-			<div class="col-md-6">
+			<div class="col-md-12 col-lg-6">
 				<div class="card myRounded bg-myBlue">
+					<center>
 					<div class="card-body">
 						<a href="{{URL::to('/ide')}}">
 							<div class="row">
 								<div class="col-md-5">
 									<a href="{{URL::to('/ide')}}" class="d-inline-block">
-										<img src="http://localhost:8000/limitless/Template/global_assets/images/brainstorming.png" alt="" style="width:80%;height:80%">
+										<img src="{{URL('/')}}/limitless/Template/global_assets/images/brainstorming.png" alt="" style="width:80%;height:80%">
 									</a>
 								</div>
 								<div class="col-md-7 padding align-items-center justify-content-center rounded p-2">
@@ -265,6 +265,7 @@
 							</div>
 						</a>
 					</div>
+					</center>
 				</div>
 				<div class="card myRounded">
 					<div class="card-body">
@@ -272,16 +273,16 @@
 						
 						@foreach($kategori as $data)
 							<h6 class="mb-0 d-flex align-items-baseline justify-content-center ">
-								<div class="col-md-5 ">
-									<span class="py-1 px-3 badge badge-icon" style="background-color: {{$data->warna}}; color:white"><i class="{{$data->kategori_thumbnail}}"></i></span>
-									<span class="py-2 px-1 py-3 mb-0 font-weight-bold ">{{$data->kategori}}</span>
+								<div class="col-lg-5 col-md-7 col-sm-4">
+									<span class="col-lg-4 col-md-4 col-sm-4 py-1 px-3 badge badge-icon" style="background-color: {{$data->warna}}; color:white"><i class="{{$data->kategori_thumbnail}}"></i></span>
+									<span class="col-lg-8 col-md-8 col-sm-8 py-2 px-1 py-3 mb-0 font-weight-bold ">{{$data->kategori}}</span>
 								</div>
-								<div class="col-md-5 py-2 px-3">
+								<div class="col-lg-5 col-md-4 col-sm-7 py-2 px-3">
 									<div class="progress mb-3" style="height: 0.7rem;">
 										<div class="progress-bar rounded-round bg-darkBlue " style="width: {{100*$data->jumlah/$jmlGroup}}%" ></div>
 									</div>
 								</div>
-								<div class="col-md-2">
+								<div class="col-lg-2 col-md-1 col-sm-1">
 									<span class="py-2 px-3 mb-0 font-weight-bold ">{{$data->jumlah}}</span>
 								</div>
 							</h6>
@@ -289,19 +290,21 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-md-6">
+			<div class="col-md-12 col-lg-6">
 				<div class="card myRounded">
 					<div class="card-body">
 						<h6 class="font-weight-bold margin">Pengguna Terbaru</h6>
 
 						@foreach($dataPengguna as $pengguna)
 							<h6 onclick="klikPengguna($pengguna->id_pengguna)" class="mb-0 d-flex align-items-center justify-content-center hover" style="border-bottom: 1px solid #E5E5E5">
-								<div class="col-md-1 py-2 px-3 ">
+								<div class="col-lg-2 col-md-2 col-sm-3 py-2 ">
+									<center>
 									<a href="{{URL::to('/akun/'.$pengguna->id_pengguna)}}" class="d-inline-block">
 										<img src="{{$pengguna->profile_picture}}"  style="object-fit: cover;" class="rounded-circle" width="30" height="30"  alt="" >
 									</a>
+									</center>
 								</div>
-								<div class="col-md-11 px-3 py-2 ">
+								<div class="col-lg-10 col-md-10 col-sm-9 py-2 ">
 									<h6 class="mb-0 px-1 font-weight-semibold">{{$pengguna->display_name}} </h6>
 									<p class="mb-0 "><small class="font-weight-semibold ml-1">{{$pengguna->email}}</small></p>
 								</div>

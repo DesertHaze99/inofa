@@ -32,3 +32,4 @@ class Chats extends Model
    }
 
 }
+

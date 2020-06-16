@@ -26,6 +26,8 @@ class IdeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     
     public function index(Request $request)
     {
         $data  = Pengguna::join('inovasi', 'pengguna_id', '=', 'id_pengguna')
@@ -39,10 +41,10 @@ class IdeController extends Controller
     //ajax datatable
     public function ideAjax()
     {
-        $data  = Pengguna::join('inovasi', 'pengguna_id', '=', 'id_pengguna')
+        $data  = Inovasi::join('pengguna', 'inovasi.pengguna_id', '=', 'pengguna.id_pengguna')
                         ->join('kategori', 'id_kategori', '=', 'kategori_id')
-                        ->join('wilayah', 'id_wilayah', '=', 'lokasi')
-                        ->select('pengguna.id_pengguna','pengguna.display_name', 'pengguna.profile_picture', 'pengguna.lokasi','inovasi.*','kategori.*', 'wilayah.*')
+                        ->join('wilayah', 'lokasi', '=', 'id_wilayah')
+                        ->select('pengguna.id_pengguna','pengguna.display_name','inovasi.*','kategori.*','wilayah.*')
                         ->get();
 
         return datatables()->of($data)
@@ -50,7 +52,9 @@ class IdeController extends Controller
                 $button = '';
                 $button .= '<form id="myform" method="post" action="">
                                 '.csrf_field().'
-                                <a type="button" href="'.URL::to('/ide/'.$data->id_inovasi.'').'" class="btn btn-outline-primary border-transparent"><b><i class="icon-arrow-right8"></i></b></a>
+                                <a type="button" href="'.URL::to('/ide/'.$data->id_inovasi.'').'" class="btn btn-outline-primary border-transparent">
+                                    <b><i class="icon-arrow-right8"></i></b>
+                                </a>
                             </form>';
                 return $button;
             })

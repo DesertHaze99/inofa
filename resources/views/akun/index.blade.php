@@ -15,6 +15,7 @@
 	<script src="{{ asset('limitless/Template/global_assets//global_assets/js/demo_pages/datatables_basic.js')}}"></script>
 	<!-- /theme JS files -->
 
+
 @endsection
 
 
@@ -61,15 +62,15 @@
 		</div>
 		<div class="card-body">
 			<!-- Basic datatable -->
-				<table id="tablePengguna" class=" table datatable-basic datatable-column-search-inputs table-hover datatable-highlight dataTable ">
+				<table id="tablePengguna" class="datatable-ajax dataTable dt-responsive no-footer table text-nowrap datatable-basic datatable-column-search-inputs table-hover datatable-highlight" >
 					<thead>
 						<tr>
 							<th>Foto Profile</th>
 							<th>Username</th>
 							<th>Email</th>
 							<th>no_telp</th>
-							<th>Rating</th>
-							<th>Manage</th>
+							<th>Kota</th>
+							<th>Lihat</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -133,10 +134,10 @@
                     {data: 'display_name', name: 'display_name'},
 					{data: 'email', name: 'email'},
 					{data: 'no_telp',name:'no_telp'},
-					{data: 'rating',name:'rating'},
+					{data: 'propinsi',name:'propinsi'},
 					{data: 'action', name: 'action', "orderable": false, "searchable": false}
                 ],
-                "fixedColumns": true,
+                "fixedColumns": false,
             });
 
         });

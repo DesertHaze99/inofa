@@ -34,16 +34,18 @@ class PenggunaController extends Controller
     //ajax datatable
     public function penggunaAjax()
     {
-        $data  = Pengguna::where('status','!=',-1)->get();
+        $data  = Pengguna::join('wilayah', 'pengguna.lokasi', '=', 'wilayah.id_wilayah')->where('pengguna.status','!=',-1)->get();
 
         $listKategori ='';
         // return $data;
         return datatables()->of($data)
             ->addColumn('action',function($data){
                 $button = '';
-                $button .= '<form id="myform" method="post" action="">
+                $button .= '<form id="button'.$data->id_pengguna.'" method="post" action="">
                                 '.csrf_field().'
-                                <a type="button" href="'.URL::to('/akun/'.$data->id_pengguna.'').'" class="btn btn-outline-primary border-transparent"><b><i class="icon-arrow-right8"></i></b></a>
+                                <a type="button" href="'.URL::to('/akun/'.$data->id_pengguna.'').'" class="btn btn-outline-primary border-transparent">
+                                    <b><i class="icon-arrow-right8"></i></b>
+                                </a>
                             </form>';
                 return $button;
             })
@@ -90,19 +92,13 @@ class PenggunaController extends Controller
                     ->get() 
         );
 
-        $mutual = DB::table('mutual_maping')
-                ->join('pengguna', 'mutual_maping.follow_to', '=', 'pengguna.id_pengguna')
-                ->where('mutual_maping.pengguna_id', '=', $id)
-                ->get();
-
         $kemampuan = KemampuanMapping::join('kemampuan', 'kemampuan_id', '=', 'id_kemampuan')
                                     ->where('pengguna_id', '=', $id)
                                     ->get();
 
-
-        $i=0;
-                    
-        return view('akun.pengguna.index', compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif','bergabungAktif', 'bergabungInaktif', 'mutual', 'kemampuan', 'pendidikan')); 
+        return view('akun.pengguna.index', 
+        compact('pengguna', 'inovasi', 'subscription', 'dibuatAktif','dibuatInaktif',
+        'bergabungAktif', 'bergabungInaktif', 'kemampuan', 'pendidikan')); 
     }
 
 
@@ -135,6 +131,27 @@ class PenggunaController extends Controller
             DB::commit();
 
             return redirect()->route('akun.show', $id)->with('success','Data pengguna berhasil di update');
+            
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return redirect()->route('akun.show', $id)->with('error','Ada yang tidak beres silahkan hubungi pengembang');
+        }
+    }
+    
+    public function destroy($id, Request $request)
+    {
+        $this->validate($request,[
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $pengguna = Pengguna::where('id_pengguna', '=', $id)->first();
+            $pengguna->status = $request->status;
+            $pengguna->save();
+            DB::commit();
+
+            return redirect()->route('akun.show', $id)->with('success','Status pengguna berhasil diubah');
             
         } catch (Exception $e) {
             DB::rollback();
