@@ -24,3 +24,4 @@ class Kategori extends Model
        return $this->belongsTo('App\Inovasi', 'id_kategori', 'kategori_id');
    }
 }
+

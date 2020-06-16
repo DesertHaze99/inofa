@@ -64,9 +64,9 @@
 		<div class="card-header">
 			<h1><b>Ide</b></h1>
 		</div>
-		<div class="card-body table-responsive">
+		<div class="card-body table-responsive col-lg-12 col-md-12 col-sm-12">
 			<!-- Basic datatable -->
-				<table id="tabelIde" class=" table text-nowrap datatable-basic datatable-column-search-inputs table-hover datatable-highlight dataTable ">
+				<table id="tabelIde" class=" datatable-ajax dataTable no-footer table text-nowrap datatable-basic datatable-column-search-inputs table-hover datatable-highlight" role="grid" aria-describedby="DataTables_Table_2_info">
 					<thead>
 						<tr>
 							<th>Thumbnail</th>
@@ -74,7 +74,7 @@
 							<th>Kota</th>
 							<th>Admin</th>
 							<th>Kategori</th>
-							<th>Manage</th>
+							<th>Lihat</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -99,7 +99,7 @@
 					<div class="col-md-9">
 						<h6 class="mb-0 font-weight-semibold">{{$inovasi->judul}}</h6>
 						<div class="row px-2">
-							<span class="mb-0 font-weight-medium text-primary">{{$inovasi->display_name}}</span> <span class="mb-0 font-weight-medium"> &nbsp | &nbsp </span> <span class="mb-0 font-weight-medium">{{explode(" ", $inovasi->created_at)[0]}}</span>
+							<span class="mb-0 font-weight-medium text-primary">{{$inovasi->display_name}}</span> <span class="mb-0 font-weight-medium"> &nbsp | &nbsp </span> <span class="mb-0 font-weight-medium">{{explode("-",explode(" ", $inovasi->created_at)[0])[2]}}-{{explode("-",explode(" ", $inovasi->created_at)[0])[1]}}-{{explode("-",explode(" ", $inovasi->created_at)[0])[0]}}</span>
 						</div>
 					</div>
 					<div class="col-md-2">

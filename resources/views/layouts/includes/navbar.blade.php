@@ -1,12 +1,12 @@
 <div class="navbar navbar-expand-md navbar-light">
-	<div class="navbar-brand wmin-200" style="margin-left:5%">
+	<div class="navbar-brand wmin-200" style="margin-left:3vw">
 		<a href="{{URL::to('/')}}" class="d-inline-block">
-			<img src="{{ asset('limitless/Template/global_assets/images/logo_light.png')}}" alt="" style="width:10%;height:10%">
+			<img src="{{ asset('limitless/Template/global_assets/images/logo_light.png')}}" alt="" style="width:130px;height:40px">
 		</a>
 		
 	</div>
 
-	<div class="d-md-none">
+	<div class="d-md-none py-2">
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
 			<i class="icon-tree5"></i>
 		</button>

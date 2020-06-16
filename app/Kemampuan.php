@@ -13,7 +13,9 @@ class Kemampuan extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'kemampuan'
+        'kemampuan',
+        'kemampuan_thumbnail'
     ];
 
 }
+

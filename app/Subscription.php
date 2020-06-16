@@ -25,6 +25,5 @@ class Subscription extends Model
     {
         return $this->hasOne('App\Pengguna', 'id_pengguna', 'pengguna_id');
     }
-
-
 }
+

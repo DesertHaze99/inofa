@@ -20,8 +20,9 @@ class Wilayah extends Model
         'jumlah'
     ];
 
-   public function inovasi()
+   public function pengguna()
    {
-       return $this->belongsTo('App\Inovasi', 'id_kategori', 'kategori_id');
+       return $this->belongsTo('App\Pengguna', 'id_wilayah', 'lokasi');
    }
 }
+

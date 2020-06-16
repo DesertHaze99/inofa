@@ -194,9 +194,6 @@
 		#customSidebar{
 			height:130vh;
 		}
-
-
-
 	</style>
 
 </head>

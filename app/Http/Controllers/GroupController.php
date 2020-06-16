@@ -34,7 +34,7 @@ class GroupController extends Controller
     //ajax datatable
     public function groupAjax()
     {
-        $data  = Pengguna::join('inovasi', 'pengguna_id', '=', 'id_pengguna')
+        $data  = Inovasi::join('pengguna', 'inovasi.pengguna_id', '=', 'pengguna.id_pengguna')
                         ->join('kategori', 'id_kategori', '=', 'kategori_id')
                         ->join('wilayah', 'lokasi', '=', 'id_wilayah')
                         ->select('pengguna.id_pengguna','pengguna.display_name','inovasi.*','kategori.*','wilayah.*')
@@ -43,9 +43,11 @@ class GroupController extends Controller
         return datatables()->of($data)
             ->addColumn('action',function($data){
                 $button = '';
-                $button .= '<form id="myform" method="post" action="">
+                $button .= '<form id="button'.$data->id_inovasi.'" method="post" action="">
                                 '.csrf_field().'
-                                <a type="button" href="'.URL::to('/group/'.$data->id_inovasi.'').'" class="btn btn-outline-primary border-transparent"><b><i class="icon-arrow-right8"></i></b></a>
+                                <a type="button" href="'.URL::to('/group/'.$data->id_inovasi.'').'" class="btn btn-outline-primary border-transparent">
+                                    <b><i class="icon-arrow-right8"></i></b>
+                                </a>
                             </form>';
                 return $button;
             })
@@ -71,10 +73,23 @@ class GroupController extends Controller
                 
         $jumlahAnggota = count(Subscription::where('inovasi_id', '=', $id)->get());
         
+        $anggotaGlance = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')
+                    ->select('pengguna.id_pengguna','pengguna.display_name','pengguna.email', 'pengguna.profile_picture','subscription.*')
+                    ->where('subscription.inovasi_id', '=', $id)
+                    ->where('subscription.status', '=', 'anggota')
+                    ->limit(7)
+                    ->get();
+
         $anggota = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')
                     ->select('pengguna.id_pengguna','pengguna.display_name','pengguna.email', 'pengguna.profile_picture','subscription.*')
                     ->where('subscription.inovasi_id', '=', $id)
-                    ->limit(7)
+                    ->where('subscription.status', '=', 'anggota')
+                    ->get();
+        
+        $anggotaPending = Subscription::join('pengguna', 'pengguna_id', '=', 'id_pengguna')
+                    ->select('pengguna.id_pengguna','pengguna.display_name','pengguna.email', 'pengguna.profile_picture','subscription.*')
+                    ->where('subscription.inovasi_id', '=', $id)
+                    ->where('subscription.status', '=', 'pending')
                     ->get();
 
         foreach($chats as $key => $value){
@@ -87,7 +102,7 @@ class GroupController extends Controller
 
         
 
-        return view('group.group', compact('inovasi', 'chats', 'temp', 'jumlahAnggota', 'anggota')); 
+        return view('group.group', compact('inovasi', 'chats', 'temp', 'jumlahAnggota', 'anggota', 'anggotaGlance', 'anggotaPending')); 
     }
 
 

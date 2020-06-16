@@ -9,7 +9,6 @@ use Auth;
 use session;
 use Datatables;
 use DateTime;
-
 use Carbon\Carbon;
 use App\Inovasi;
 use App\Pengguna;
@@ -57,7 +56,8 @@ class DashboardController extends Controller
         $warna[3]="bg-darkBlue";
         $warna[4]="bg-myTeal";
 
-    	return view('dashboard.index', compact('jmlPengguna', 'jmlGroup', 'jmlDiskusi', 'kategori', 'dataPengguna', 'jmlPenggunaNew', 'jmlGroupNew', 'jmlDiskusiNew', 'wilayah', 'warna'));
+        return view('dashboard.index', compact('jmlPengguna', 'jmlGroup', 'jmlDiskusi', 'kategori', 'dataPengguna', 
+        'jmlPenggunaNew', 'jmlGroupNew', 'jmlDiskusiNew', 'wilayah', 'warna'));
     }
 
 

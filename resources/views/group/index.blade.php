@@ -61,15 +61,15 @@
 		</div>
 		<div class="card-body">
 			<!-- Basic datatable -->
-				<table id="tabelIde" class=" table datatable-basic datatable-column-search-inputs table-hover datatable-highlight dataTable ">
+				<table id="tabelIde" class=" datatable-ajax dataTable no-footer table text-nowrap datatable-basic datatable-column-search-inputs table-hover datatable-highlight" role="grid" aria-describedby="DataTables_Table_2_info">
 					<thead>
 						<tr>
 							<th>Thumbnail</th>
 							<th>Nama Group</th>
 							<th>Kota</th>
 							<th>Admin</th>
-							<th>Anggota</th>
-							<th>Manage</th>
+							<th>Jumlah Anggota</th>
+							<th>Lihat</th>
 						</tr>
 					</thead>
 					<tbody>

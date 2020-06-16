@@ -22,7 +22,13 @@ class KemampuanMapping extends Model
 
    public function pengguna()
    {
-       return $this->belongsTo('App\Pengguna', 'pengguna_id', 'id_pengguna');
+       return $this->hasOne('App\Pengguna', 'pengguna_id', 'id_pengguna');
+   }
+
+   public function kemampuan()
+   {
+       return $this->hasMany('App\Kemampuan', 'kemampuan_id', 'id_kemampuan');
    }
 
 }
+
